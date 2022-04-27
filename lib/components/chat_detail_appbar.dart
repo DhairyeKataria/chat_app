@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class ChatDetailPageAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   @override
@@ -10,33 +11,33 @@ class ChatDetailPageAppBar extends StatelessWidget
       backgroundColor: Colors.white,
       flexibleSpace: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(right: 16),
+          padding: const EdgeInsets.only(right: 16),
           child: Row(
             children: <Widget>[
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 2,
               ),
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundImage: AssetImage("images/userImage1.jpeg"),
                 maxRadius: 20,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                  children: const <Widget>[
                     Text(
                       "Jane Russel",
                       style: TextStyle(fontWeight: FontWeight.w600),
@@ -64,5 +65,5 @@ class ChatDetailPageAppBar extends StatelessWidget
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

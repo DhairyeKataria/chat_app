@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/chat_tile.dart';
 import '../components/search_bar.dart';
 import '../models/chat_model.dart';
@@ -7,7 +6,7 @@ import '../models/chat_model.dart';
 class ChatScreen extends StatelessWidget {
   ChatScreen({Key? key}) : super(key: key);
 
-  List<Chat> chatList = [
+  final List<Chat> chatList = [
     Chat(
       text: 'Jane Russel',
       secondaryText: 'Awesome Setup',

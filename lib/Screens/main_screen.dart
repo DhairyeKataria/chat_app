@@ -1,7 +1,6 @@
-import 'package:chat_app/Screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:chat_app/Screens/profile.dart';
 import 'chat_screen.dart';
 
 class MainScreen extends StatefulWidget {

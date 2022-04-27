@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../components/chat_bubble.dart';
-import '../components/chat_detail_page_appbar.dart';
+import '../components/chat_detail_appbar.dart';
 import '../models/chat_message.dart';
 import '../models/send_menu_items.dart';
 
 enum MessageType {
-  Sender,
-  Receiver,
+  sender,
+  receiver,
 }
 
+// ignore: use_key_in_widget_constructors
 class ChatDetail extends StatefulWidget {
   @override
   _ChatDetailState createState() => _ChatDetailState();
@@ -17,14 +18,14 @@ class ChatDetail extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetail> {
   List<ChatMessage> chatMessage = [
-    ChatMessage(message: "Hi John", type: MessageType.Receiver),
-    ChatMessage(message: "Hope you are doin good", type: MessageType.Receiver),
+    ChatMessage(message: "Hi John", type: MessageType.receiver),
+    ChatMessage(message: "Hope you are doin good", type: MessageType.receiver),
     ChatMessage(
         message: "Hello Jane, I'm good what about you",
-        type: MessageType.Sender),
+        type: MessageType.sender),
     ChatMessage(
-        message: "I'm fine, Working from home", type: MessageType.Receiver),
-    ChatMessage(message: "Oh! Nice. Same here man", type: MessageType.Sender),
+        message: "I'm fine, Working from home", type: MessageType.receiver),
+    ChatMessage(message: "Oh! Nice. Same here man", type: MessageType.sender),
   ];
 
   List<SendMenuItems> menuItems = [
@@ -42,58 +43,63 @@ class _ChatDetailState extends State<ChatDetail> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            color: Color(0xff737373),
+          return SafeArea(
             child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20)),
-              ),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Center(
-                    child: Container(
-                      height: 4,
-                      width: 50,
-                      color: Colors.grey.shade200,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ListView.builder(
-                    itemCount: menuItems.length,
-                    shrinkWrap: true,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: ListTile(
-                          leading: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: menuItems[index].color.shade50,
-                            ),
-                            height: 50,
-                            width: 50,
-                            child: Icon(
-                              menuItems[index].icons,
-                              size: 20,
-                              color: menuItems[index].color.shade400,
-                            ),
-                          ),
-                          title: Text(menuItems[index].text),
+              height: MediaQuery.of(context).size.height / 2,
+              color: const Color(0xff737373),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(20),
+                      topLeft: Radius.circular(20)),
+                ),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Center(
+                        child: Container(
+                          height: 4,
+                          width: 50,
+                          color: Colors.grey.shade200,
                         ),
-                      );
-                    },
-                  )
-                ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ListView.builder(
+                        itemCount: menuItems.length,
+                        shrinkWrap: true,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: ListTile(
+                              leading: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: menuItems[index].color.shade50,
+                                ),
+                                height: 50,
+                                width: 50,
+                                child: Icon(
+                                  menuItems[index].icons,
+                                  size: 20,
+                                  color: menuItems[index].color.shade400,
+                                ),
+                              ),
+                              title: Text(menuItems[index].text),
+                            ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
           );
@@ -120,7 +126,7 @@ class _ChatDetailState extends State<ChatDetail> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: EdgeInsets.only(left: 16, bottom: 10),
+              padding: const EdgeInsets.only(left: 16, bottom: 10),
               height: 80,
               width: double.infinity,
               color: Colors.white,
@@ -137,14 +143,14 @@ class _ChatDetailState extends State<ChatDetail> {
                         color: Colors.blueGrey,
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         color: Colors.white,
                         size: 21,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Expanded(
@@ -162,15 +168,15 @@ class _ChatDetailState extends State<ChatDetail> {
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
-              padding: EdgeInsets.only(right: 30, bottom: 50),
+              padding: const EdgeInsets.only(right: 30, bottom: 50),
               child: FloatingActionButton(
                 onPressed: () {},
-                child: Icon(
+                child: const Icon(
                   Icons.send,
                   color: Colors.white,
                 ),
                 backgroundColor: Colors.pink,
-                elevation: 0,
+                elevation: 1.0,
               ),
             ),
           )
