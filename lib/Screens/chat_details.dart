@@ -51,8 +51,9 @@ class _ChatDetailState extends State<ChatDetail> {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      topLeft: Radius.circular(20)),
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20),
+                  ),
                 ),
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),

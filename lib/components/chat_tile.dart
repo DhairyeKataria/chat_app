@@ -23,12 +23,10 @@ class ChatTile extends StatefulWidget {
 class _ChatTileState extends State<ChatTile> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, 'Chat Details');
-        },
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, 'Chat Details'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
         child: Row(
           children: [
             CircleAvatar(
@@ -37,6 +35,7 @@ class _ChatTileState extends State<ChatTile> {
             ),
             const SizedBox(width: 16.0),
             Expanded(
+              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

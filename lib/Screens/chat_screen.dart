@@ -74,18 +74,18 @@ class ChatScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Chats',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   children: const [
+            const Text(
+              'Chats',
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            //   ],
+            // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SearchBar(
