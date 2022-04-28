@@ -1,3 +1,5 @@
+import 'package:chat_app/Screens/chat_details.dart';
+import 'package:chat_app/models/chat_model.dart';
 import 'package:flutter/material.dart';
 
 class ChatTile extends StatefulWidget {
@@ -21,10 +23,27 @@ class ChatTile extends StatefulWidget {
 }
 
 class _ChatTileState extends State<ChatTile> {
+  late Chat chat;
+
+  @override
+  void initState() {
+    super.initState();
+    chat = Chat(
+      text: widget.text,
+      secondaryText: widget.secondaryText,
+      image: widget.image,
+      time: widget.time,
+      isRead: widget.isRead,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'Chat Details'),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChatDetail(chat)),
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
         child: Row(

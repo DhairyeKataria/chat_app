@@ -2,6 +2,7 @@ import 'package:chat_app/Screens/chat_details.dart';
 import 'package:flutter/material.dart';
 import 'Screens/main_screen.dart';
 import 'Screens/profile.dart';
+import 'data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       home: const MainScreen(),
       routes: {
         'Chats': (context) => const MainScreen(),
-        'Chat Details': (context) => ChatDetail(),
+        'Chat Details': (context) => ChatDetail(Data.chatList[0]),
         'Profile': (context) => Profile(),
       },
       // home: MainScreen(),

@@ -1,4 +1,4 @@
-import '../Screens/chat_details.dart';
+import 'package:chat_app/data.dart';
 
 class ChatMessage {
   String message;

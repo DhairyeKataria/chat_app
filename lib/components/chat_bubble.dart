@@ -1,6 +1,6 @@
 import 'package:chat_app/models/chat_message.dart';
 import 'package:flutter/material.dart';
-import '../Screens/chat_details.dart';
+import 'package:chat_app/data.dart';
 
 // ignore_for_file: must_be_immutable
 class ChatBubble extends StatefulWidget {

@@ -1,8 +1,13 @@
+import 'package:chat_app/models/chat_model.dart';
 import 'package:flutter/material.dart';
 
 // ignore: use_key_in_widget_constructors
 class ChatDetailPageAppBar extends StatelessWidget
     implements PreferredSizeWidget {
+  // ignore: use_key_in_widget_constructors
+  const ChatDetailPageAppBar(this.chat);
+  final Chat chat;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -26,8 +31,8 @@ class ChatDetailPageAppBar extends StatelessWidget
               const SizedBox(
                 width: 2,
               ),
-              const CircleAvatar(
-                backgroundImage: AssetImage("images/userImage1.jpeg"),
+              CircleAvatar(
+                backgroundImage: AssetImage(chat.image),
                 maxRadius: 20,
               ),
               const SizedBox(
@@ -37,15 +42,15 @@ class ChatDetailPageAppBar extends StatelessWidget
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Text(
-                      "Jane Russel",
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      chat.text,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
-                    Text(
+                    const Text(
                       "Online",
                       style: TextStyle(color: Colors.green, fontSize: 12),
                     ),

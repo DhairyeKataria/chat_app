@@ -1,32 +1,24 @@
 import 'package:flutter/material.dart';
-
 import '../components/chat_bubble.dart';
 import '../components/chat_detail_appbar.dart';
+import '../data.dart';
 import '../models/chat_message.dart';
+import '../models/chat_model.dart';
 import '../models/send_menu_items.dart';
-
-enum MessageType {
-  sender,
-  receiver,
-}
 
 // ignore: use_key_in_widget_constructors
 class ChatDetail extends StatefulWidget {
+  // ignore: use_key_in_widget_constructors
+  const ChatDetail(this.chat);
+
+  final Chat chat;
+
   @override
   _ChatDetailState createState() => _ChatDetailState();
 }
 
 class _ChatDetailState extends State<ChatDetail> {
-  List<ChatMessage> chatMessage = [
-    ChatMessage(message: "Hi John", type: MessageType.receiver),
-    ChatMessage(message: "Hope you are doin good", type: MessageType.receiver),
-    ChatMessage(
-        message: "Hello Jane, I'm good what about you",
-        type: MessageType.sender),
-    ChatMessage(
-        message: "I'm fine, Working from home", type: MessageType.receiver),
-    ChatMessage(message: "Oh! Nice. Same here man", type: MessageType.sender),
-  ];
+  final List<ChatMessage> chatMessage = Data.chatMessage;
 
   List<SendMenuItems> menuItems = [
     SendMenuItems(
@@ -110,14 +102,14 @@ class _ChatDetailState extends State<ChatDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChatDetailPageAppBar(),
+      appBar: ChatDetailPageAppBar(widget.chat),
       body: Stack(
         children: <Widget>[
           ListView.builder(
             itemCount: chatMessage.length,
             shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            physics: NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            physics: const AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return ChatBubble(
                 chatMessage: chatMessage[index],
