@@ -6,6 +6,8 @@ enum MessageType {
   receiver,
 }
 
+bool isLoggedIn = false;
+
 class Data {
   static List<ChatMessage> chatMessage = [
     ChatMessage(

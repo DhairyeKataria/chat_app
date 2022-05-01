@@ -9,8 +9,31 @@ class SignUpScreen extends StatelessWidget {
   late String password;
   late String secondPassword;
 
+  List<String> signUpFields = [
+    'Enter your username',
+    'Enter you email',
+    'Enter your password',
+    'Re-Enter you password'
+  ];
+
   @override
   Widget build(BuildContext context) {
+    //
+    List<Function(String)> signUpFunctions = [
+      (value) {
+        username = value;
+      },
+      (value) {
+        email = value;
+      },
+      (value) {
+        password = value;
+      },
+      (value) {
+        secondPassword = value;
+      },
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -45,60 +68,18 @@ class SignUpScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              TextField(
-                                keyboardType: TextInputType.name,
-                                cursorColor: Colors.pink,
-                                cursorRadius: const Radius.circular(20.0),
-                                cursorWidth: 10.0,
-                                cursorHeight: 22.0,
-                                decoration: kTextFieldDecoration.copyWith(
-                                  hintText: 'Enter your username',
+                              for (int i = 0; i < 4; i++)
+                                TextField(
+                                  keyboardType: TextInputType.name,
+                                  cursorColor: Colors.pink,
+                                  cursorRadius: const Radius.circular(20.0),
+                                  cursorWidth: 10.0,
+                                  cursorHeight: 22.0,
+                                  decoration: kTextFieldDecoration.copyWith(
+                                    hintText: signUpFields[i],
+                                  ),
+                                  onChanged: signUpFunctions[i],
                                 ),
-                                onChanged: (value) {
-                                  username = value;
-                                },
-                              ),
-                              TextField(
-                                keyboardType: TextInputType.emailAddress,
-                                cursorColor: Colors.pink,
-                                cursorRadius: const Radius.circular(20.0),
-                                cursorWidth: 10.0,
-                                cursorHeight: 22.0,
-                                decoration: kTextFieldDecoration.copyWith(
-                                  hintText: 'Enter your email',
-                                ),
-                                onChanged: (value) {
-                                  email = value;
-                                },
-                              ),
-                              TextField(
-                                obscureText: true,
-                                keyboardType: TextInputType.emailAddress,
-                                cursorColor: Colors.pink,
-                                cursorRadius: const Radius.circular(20.0),
-                                cursorWidth: 10.0,
-                                cursorHeight: 22.0,
-                                decoration: kTextFieldDecoration.copyWith(
-                                  hintText: 'Enter the password',
-                                ),
-                                onChanged: (value) {
-                                  password = value;
-                                },
-                              ),
-                              TextField(
-                                obscureText: true,
-                                keyboardType: TextInputType.emailAddress,
-                                cursorColor: Colors.pink,
-                                cursorRadius: const Radius.circular(20.0),
-                                cursorWidth: 10.0,
-                                cursorHeight: 22.0,
-                                decoration: kTextFieldDecoration.copyWith(
-                                  hintText: 'Re-Enter the password',
-                                ),
-                                onChanged: (value) {
-                                  secondPassword = value;
-                                },
-                              ),
                             ],
                           ),
                         ),

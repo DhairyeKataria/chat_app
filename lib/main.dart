@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // Change home to SignUpScreen()
-      home: LogInScreen(),
+      home: isLoggedIn ? const MainScreen() : LogInScreen(),
       routes: {
         'main': (context) => const MainScreen(),
         'Chat Details': (context) => ChatDetail(Data.chatList[0]),

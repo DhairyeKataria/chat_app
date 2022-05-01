@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chat_app/constants.dart';
+import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -104,6 +105,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                           'user1@gmail.com' &&
                                       password == 'yesUser1!') {
                                     Navigator.pushNamed(context, 'main');
+                                    isLoggedIn = true;
                                   }
                                   setState(() {
                                     _showSpinner = false;
