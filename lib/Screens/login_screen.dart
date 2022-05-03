@@ -131,6 +131,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     print(e);
                                   }
                                 }
+
                                 Navigator.pushNamed(context, 'main');
                                 setState(() {
                                   _showSpinner = false;
