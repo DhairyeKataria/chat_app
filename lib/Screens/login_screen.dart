@@ -1,9 +1,31 @@
-import 'dart:async';
-import 'package:chat_app/constants.dart';
-import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:http/http.dart' as http;
+import 'package:chat_app/constants.dart';
+import 'package:chat_app/data.dart';
+
+import '../models/login.dart';
+
+Future<Login> logInUser(String username, String password) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:6000/register'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'password': password,
+    }),
+  );
+  if (response.statusCode == 201) {
+    return Login.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Error logging in user');
+  }
+}
 
 class LogInScreen extends StatefulWidget {
   LogInScreen({Key? key}) : super(key: key);
@@ -13,9 +35,10 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  String? email;
+  String? username;
   String? password;
   bool _showSpinner = false;
+  Future<Login>? _loginUser;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +100,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 hintText: 'Enter the email',
                               ),
                               onChanged: (value) {
-                                email = value;
+                                username = value;
                               },
                             ),
                             TextField(
@@ -99,17 +122,18 @@ class _LogInScreenState extends State<LogInScreen> {
                                 setState(() {
                                   _showSpinner = true;
                                 });
-                                Future.delayed(Duration(seconds: 4), () {
-                                  //TODO: Implement LogIn Functionality here
-                                  if (email!.toLowerCase() ==
-                                          'user1@gmail.com' &&
-                                      password == 'yesUser1!') {
-                                    Navigator.pushNamed(context, 'main');
-                                    isLoggedIn = true;
+                                //TODO: Implement LogIn Functionality here
+                                if (username != null && password != null) {
+                                  try {
+                                    _loginUser =
+                                        logInUser(username!, password!);
+                                  } catch (e) {
+                                    print(e);
                                   }
-                                  setState(() {
-                                    _showSpinner = false;
-                                  });
+                                }
+                                Navigator.pushNamed(context, 'main');
+                                setState(() {
+                                  _showSpinner = false;
                                 });
                               },
                               style: ButtonStyle(

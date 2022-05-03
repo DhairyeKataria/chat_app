@@ -1,25 +1,63 @@
+import 'dart:convert';
 import 'package:chat_app/constants.dart';
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
-class SignUpScreen extends StatelessWidget {
+Future<User> createUser(
+    String name, String username, String email, String password) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:6000/register'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'name': name,
+      'username': username,
+      'email': email,
+      'password': password,
+    }),
+  );
+  if (response.statusCode == 201) {
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Error creating user');
+  }
+}
+
+class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  PickedFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+  Future<User>? _user;
+
+  late String name;
   late String username;
   late String email;
   late String password;
-  late String secondPassword;
 
   List<String> signUpFields = [
-    'Enter your username',
-    'Enter you email',
-    'Enter your password',
-    'Re-Enter you password'
+    'Enter your name',
+    'Enter you username',
+    'Enter your email',
+    'Enter you password'
   ];
 
   @override
   Widget build(BuildContext context) {
     //
     List<Function(String)> signUpFunctions = [
+      (value) {
+        name = value;
+      },
       (value) {
         username = value;
       },
@@ -28,9 +66,6 @@ class SignUpScreen extends StatelessWidget {
       },
       (value) {
         password = value;
-      },
-      (value) {
-        secondPassword = value;
       },
     ];
 
@@ -47,12 +82,38 @@ class SignUpScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Expanded(
+                  Expanded(
                     flex: 2,
                     child: Center(
-                      child: CircleAvatar(
-                        radius: 80.0,
-                        backgroundImage: AssetImage('images/userImage1.jpeg'),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const CircleAvatar(
+                            radius: 80.0,
+                            backgroundImage: AssetImage("images/default.png"),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: -24,
+                            child: RawMaterialButton(
+                              padding: const EdgeInsets.all(12.0),
+                              fillColor: const Color(0xFFF5F6F9),
+                              shape: const CircleBorder(),
+                              elevation: 3.0,
+                              child: Icon(
+                                FontAwesomeIcons.pen,
+                                color: Colors.pink.shade300,
+                              ),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) =>
+                                      profileImageUploaderSheet(context),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -88,12 +149,9 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   if (MediaQuery.of(context).viewInsets.bottom == 0)
                     TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         //TODO: Implement SignUp Functionality here
-                        print(username);
-                        print(email);
-                        print(password);
-                        print(secondPassword);
+                        _user = createUser(name, username, email, password);
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
@@ -123,4 +181,84 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget profileImageUploaderSheet(BuildContext context) {
+  return Container(
+    color: const Color(0xff737373),
+    child: Container(
+      height: 220.0,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 40.0, top: 10.0, left: 10.0, right: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'Upload Profile Picture',
+              style: TextStyle(
+                color: Colors.grey.shade800,
+                fontSize: 22.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          FontAwesomeIcons.image,
+                          color: Colors.pink,
+                          size: 30.0,
+                        ),
+                      ),
+                      Text(
+                        'Gallery',
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          FontAwesomeIcons.camera,
+                          color: Colors.pink,
+                          size: 30.0,
+                        ),
+                      ),
+                      Text(
+                        'Camera',
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }
