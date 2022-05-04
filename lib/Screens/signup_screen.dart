@@ -10,7 +10,7 @@ import 'package:chat_app/components/profile_image_uploader_sheet.dart';
 Future<User> createUser(
     String name, String username, String email, String password) async {
   final response = await http.post(
-    Uri.parse('http://192.168.43.122'),
+    Uri.parse('http://localhost:7000/register'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
