@@ -10,7 +10,7 @@ import '../models/login.dart';
 
 Future<Login> logInUser(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:6000'),
+    Uri.parse('http://192.168.43.122'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -84,106 +84,101 @@ class _LogInScreenState extends State<LogInScreen> {
                       constraints: BoxConstraints(
                         minHeight: MediaQuery.of(context).size.height * 2 / 5,
                       ),
-                      child: Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            TextField(
-                              keyboardType: TextInputType.emailAddress,
-                              cursorColor: Colors.pink,
-                              cursorRadius: const Radius.circular(20.0),
-                              cursorWidth: 10.0,
-                              cursorHeight: 22.0,
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter the email',
-                              ),
-                              onChanged: (value) {
-                                username = value;
-                              },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            cursorColor: Colors.pink,
+                            cursorRadius: const Radius.circular(20.0),
+                            cursorWidth: 10.0,
+                            cursorHeight: 22.0,
+                            decoration: kTextFieldDecoration.copyWith(
+                              hintText: 'Enter the email',
                             ),
-                            TextField(
-                              obscureText: true,
-                              keyboardType: TextInputType.emailAddress,
-                              cursorColor: Colors.pink,
-                              cursorRadius: const Radius.circular(20.0),
-                              cursorWidth: 10.0,
-                              cursorHeight: 22.0,
-                              decoration: kTextFieldDecoration.copyWith(
-                                hintText: 'Enter the password',
-                              ),
-                              onChanged: (value) {
-                                password = value;
-                              },
+                            onChanged: (value) {
+                              username = value;
+                            },
+                          ),
+                          TextField(
+                            obscureText: true,
+                            keyboardType: TextInputType.emailAddress,
+                            cursorColor: Colors.pink,
+                            cursorRadius: const Radius.circular(20.0),
+                            cursorWidth: 10.0,
+                            cursorHeight: 22.0,
+                            decoration: kTextFieldDecoration.copyWith(
+                              hintText: 'Enter the password',
                             ),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _showSpinner = true;
-                                });
-                                //TODO: Implement LogIn Functionality here
-                                if (username != null && password != null) {
-                                  try {
-                                    _loginUser =
-                                        logInUser(username!, password!);
-                                  } catch (e) {
-                                    print(e);
-                                  }
+                            onChanged: (value) {
+                              password = value;
+                            },
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _showSpinner = true;
+                              });
+                              //TODO: Implement LogIn Functionality here
+                              if (username != null && password != null) {
+                                try {
+                                  _loginUser = logInUser(username!, password!);
+                                } catch (e) {
+                                  print(e);
                                 }
-                                if (_loginUser != null) {
-                                  Navigator.pushNamed(context, 'main');
-                                }
-                                setState(() {
-                                  _showSpinner = false;
-                                });
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.green.shade100,
-                                ),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.green,
-                                ),
+                              }
+                              if (_loginUser != null) {
+                                Navigator.pushNamed(context, 'main');
+                              }
+                              setState(() {
+                                _showSpinner = false;
+                              });
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.green.shade100,
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Log In',
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                Colors.green,
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Log In',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Not a user yet?',
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Not a user yet?',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, 'SignUp');
+                                },
+                                child: const Text(
+                                  'Sign Up',
                                   style: TextStyle(
                                     fontSize: 15.0,
+                                    color: Colors.pink,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, 'SignUp');
-                                  },
-                                  child: const Text(
-                                    'Sign Up',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      color: Colors.pink,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   ),
