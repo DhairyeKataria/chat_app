@@ -10,7 +10,7 @@ import '../models/login.dart';
 
 Future<Login> logInUser(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://192.168.43.122'),
+    Uri.parse('http://localhost:7000/register'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
