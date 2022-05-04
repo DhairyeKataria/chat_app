@@ -5,13 +5,12 @@ import 'dart:convert';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat_app/constants.dart';
-import 'package:chat_app/data.dart';
 
 import '../models/login.dart';
 
 Future<Login> logInUser(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://localhost:6000/register'),
+    Uri.parse('https://localhost:6000/register'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -131,8 +130,9 @@ class _LogInScreenState extends State<LogInScreen> {
                                     print(e);
                                   }
                                 }
-
-                                Navigator.pushNamed(context, 'main');
+                                if (_loginUser != null) {
+                                  Navigator.pushNamed(context, 'main');
+                                }
                                 setState(() {
                                   _showSpinner = false;
                                 });
