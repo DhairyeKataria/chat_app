@@ -10,7 +10,7 @@ import '../models/login.dart';
 
 Future<Login> logInUser(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:7000/register'),
+    Uri.parse('http://10.0.2.2:8000/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -19,10 +19,16 @@ Future<Login> logInUser(String username, String password) async {
       'password': password,
     }),
   );
-  if (response.statusCode == 201) {
-    return Login.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Error logging in user');
+  try {
+    if (response.statusCode == 201) {
+      print(response.body);
+      return Login.fromJson(jsonDecode(response.body));
+    } else {
+      print(response.body);
+      throw Exception('Error logging in user');
+    }
+  } catch (e) {
+    rethrow;
   }
 }
 
