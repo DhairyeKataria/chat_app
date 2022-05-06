@@ -120,6 +120,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               setState(() {
                                 _showSpinner = true;
                               });
+
                               //TODO: Implement LogIn Functionality here
                               if (username != null && password != null) {
                                 try {
@@ -127,10 +128,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                 } catch (e) {
                                   print(e);
                                 }
+                                if (_loginUser != null) {
+                                  Navigator.pushNamed(context, 'main');
+                                }
                               }
-                              if (_loginUser != null) {
-                                Navigator.pushNamed(context, 'main');
-                              }
+
                               setState(() {
                                 _showSpinner = false;
                               });

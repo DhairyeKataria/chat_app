@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:chat_app/components/profile_image_uploader_sheet.dart';
@@ -29,15 +31,14 @@ Future<User> createUser(
 }
 
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  PickedFile? _imageFile;
-  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
   Future<User>? _user;
 
   late String name;
@@ -51,6 +52,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     'Enter your email',
     'Enter you password'
   ];
+
+  void takePhoto(ImageSource source) async {
+    final _pickedFile = await ImagePicker().pickImage(source: source);
+    setState(() {
+      _imageFile = File(_pickedFile!.path);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         password = value;
       },
     ];
-
-    void takePhoto(ImageSource source) async {
-      final pickedFile = await _picker.pickImage(source: source);
-    }
 
     return Scaffold(
       body: SafeArea(
@@ -93,9 +97,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 80.0,
-                            backgroundImage: AssetImage("images/default.png"),
+                            backgroundImage: _imageFile != null
+                                ? FileImage(_imageFile!) as ImageProvider
+                                : AssetImage('images/default.png'),
                           ),
                           Positioned(
                             bottom: 0,
@@ -112,8 +118,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               onPressed: () {
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: (context) =>
-                                      profileImageUploaderSheet(context),
+                                  builder: (context) {
+                                    return ProfileImageUploaderSheet(
+                                      galleryOnTap: () {
+                                        takePhoto(ImageSource.gallery);
+                                        Navigator.pop(context);
+                                      },
+                                      cameraOnTap: () {
+                                        takePhoto(ImageSource.gallery);
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -136,6 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             for (int i = 0; i < 4; i++)
                               TextField(
                                 keyboardType: TextInputType.name,
+                                obscureText: i == 3 ? true : false,
                                 cursorColor: Colors.pink,
                                 cursorRadius: const Radius.circular(20.0),
                                 cursorWidth: 10.0,
