@@ -1,7 +1,9 @@
 import 'package:chat_app/Screens/chat_details.dart';
+import 'package:chat_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'Screens/main_screen.dart';
 import 'Screens/profile.dart';
+import 'Screens/signup_screen.dart';
 import 'data.dart';
 
 void main() {
@@ -22,11 +24,14 @@ class MyApp extends StatelessWidget {
           selectionColor: Colors.grey,
         ),
       ),
-      home: const MainScreen(),
+      // Change home to SignUpScreen()
+      home: LogInScreen(),
       routes: {
-        'Chats': (context) => const MainScreen(),
+        'main': (context) => const MainScreen(),
         'Chat Details': (context) => ChatDetail(Data.chatList[0]),
         'Profile': (context) => Profile(),
+        'LogIn': (context) => LogInScreen(),
+        'SignUp': (context) => SignUpScreen(),
       },
       // home: MainScreen(),
     );
