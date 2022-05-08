@@ -1,3 +1,4 @@
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -8,27 +9,23 @@ import 'package:chat_app/constants.dart';
 
 import '../models/login.dart';
 
-Future<Login> logInUser(String username, String password) async {
+Future<User> logInUser(String username, String password) async {
   final response = await http.post(
     Uri.parse('http://10.0.2.2:8000/login'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'username': username,
+      'username': username.toLowerCase(),
       'password': password,
     }),
   );
-  try {
-    if (response.statusCode == 201) {
-      print(response.body);
-      return Login.fromJson(jsonDecode(response.body));
-    } else {
-      print(response.body);
-      throw Exception('Error logging in user');
-    }
-  } catch (e) {
-    rethrow;
+  if (response.statusCode == 201) {
+    print(response.body);
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    print(response.body);
+    throw Exception('Error logging in user');
   }
 }
 
@@ -43,7 +40,7 @@ class _LogInScreenState extends State<LogInScreen> {
   String? username;
   String? password;
   bool _showSpinner = false;
-  Future<Login>? _loginUser;
+  User? _loginUser;
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +119,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             },
                           ),
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               setState(() {
                                 _showSpinner = true;
                               });
@@ -130,12 +127,13 @@ class _LogInScreenState extends State<LogInScreen> {
                               //TODO: Implement LogIn Functionality here
                               if (username != null && password != null) {
                                 try {
-                                  _loginUser = logInUser(username!, password!);
+                                  _loginUser =
+                                      await logInUser(username!, password!);
+                                  if (_loginUser != null) {
+                                    Navigator.pushNamed(context, 'main');
+                                  }
                                 } catch (e) {
                                   print(e);
-                                }
-                                if (_loginUser != null) {
-                                  Navigator.pushNamed(context, 'main');
                                 }
                               }
 

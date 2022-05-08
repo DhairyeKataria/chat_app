@@ -41,7 +41,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   File? _imageFile;
-  Future<User>? _user;
+  User? _user;
 
   late String name;
   late String username;
@@ -173,7 +173,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     TextButton(
                       onPressed: () async {
                         //TODO: Implement SignUp Functionality here
-                        _user = createUser(name, username, email, password);
+                        try {
+                          _user =
+                              await createUser(name, username, email, password);
+                          if (_user != null) {
+                            Navigator.pushNamed(context, 'main');
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
