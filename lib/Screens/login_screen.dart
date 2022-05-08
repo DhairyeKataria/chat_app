@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -10,16 +11,21 @@ import 'package:chat_app/constants.dart';
 import '../models/login.dart';
 
 Future<User> logInUser(String username, String password) async {
-  final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/login'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'username': username.toLowerCase(),
-      'password': password,
-    }),
-  );
+  final response;
+  try {
+    response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username.toLowerCase(),
+        'password': password,
+      }),
+    );
+  } catch (e) {
+    throw Exception('Error logging in user');
+  }
   if (response.statusCode == 201) {
     print(response.body);
     return User.fromJson(jsonDecode(response.body));
@@ -120,21 +126,36 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           TextButton(
                             onPressed: () async {
+                              if (username == null || password == null) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.SCALE,
+                                  title: 'Empty Field(s)',
+                                  desc: 'Empty Username or Password',
+                                  btnOkOnPress: () {},
+                                ).show();
+                                return;
+                              }
+
                               setState(() {
                                 _showSpinner = true;
                               });
 
-                              //TODO: Implement LogIn Functionality here
-                              if (username != null && password != null) {
-                                try {
-                                  _loginUser =
-                                      await logInUser(username!, password!);
-                                  if (_loginUser != null) {
-                                    Navigator.pushNamed(context, 'main');
-                                  }
-                                } catch (e) {
-                                  print(e);
+                              try {
+                                _loginUser =
+                                    await logInUser(username!, password!);
+                                if (_loginUser != null) {
+                                  Navigator.pushNamed(context, 'main');
                                 }
+                              } catch (e) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.SCALE,
+                                  title: 'Error Logging in User',
+                                  btnOkOnPress: () {},
+                                ).show();
                               }
 
                               setState(() {
