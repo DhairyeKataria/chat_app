@@ -12,15 +12,9 @@ import 'package:chat_app/models/user.dart';
 Future<User> logInUser(String username, String password) async {
   final dynamic response;
   final User user;
-  final String url;
-  if (Platform.isAndroid) {
-    url = 'http://10.0.2.2:8000/login';
-  } else {
-    url = 'http://localhost:8000/login';
-  }
   try {
     response = await http.post(
-      Uri.parse(url),
+      Uri.parse('$url/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 InputDecoration kTextFieldDecoration = InputDecoration(
@@ -21,4 +23,14 @@ ScrollPhysics keyboardDependentScrollPhysics(BuildContext context) {
   } else {
     return const AlwaysScrollableScrollPhysics();
   }
+}
+
+String get url {
+  final String url;
+  if (Platform.isAndroid) {
+    url = 'http://10.0.2.2:8000';
+  } else {
+    url = 'http://localhost:8000';
+  }
+  return url;
 }

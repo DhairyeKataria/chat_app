@@ -16,15 +16,9 @@ Future<User> createUser(
     String name, String username, String email, String password) async {
   final http.Response response;
   final dynamic user;
-  final String url;
-  if (Platform.isAndroid) {
-    url = 'http://10.0.2.2:8000/register';
-  } else {
-    url = 'http://localhost:8000/register';
-  }
   try {
     response = await http.post(
-      Uri.parse(url),
+      Uri.parse('$url/response'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
