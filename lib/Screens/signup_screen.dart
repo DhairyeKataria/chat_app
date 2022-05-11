@@ -207,7 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     if (MediaQuery.of(context).viewInsets.bottom == 0)
                       TextButton(
-                        onPressed: () async {
+                        onPressed: () {
                           if (email == null ||
                               username == null ||
                               name == null ||
@@ -226,29 +226,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _showSpinner = true;
                           });
 
-                          try {
-                            _user = await createUser(
-                              name!.toLowerCase(),
-                              username!.toLowerCase(),
-                              email!.toLowerCase(),
-                              password!,
-                            );
-                            if (_user != null) {
-                              Navigator.pushNamed(context, 'main');
-                            }
-                          } catch (e) {
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.ERROR,
-                              animType: AnimType.SCALE,
-                              title: e.toString().substring(11),
-                              btnOkOnPress: () {},
-                            ).show();
-                          }
+                          Future.delayed(
+                            const Duration(seconds: 2),
+                            () async {
+                              try {
+                                _user = await createUser(
+                                  name!.toLowerCase(),
+                                  username!.toLowerCase(),
+                                  email!.toLowerCase(),
+                                  password!,
+                                );
+                                if (_user != null) {
+                                  Navigator.pushNamed(context, 'main');
+                                }
+                              } catch (e) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.SCALE,
+                                  title: e.toString().substring(11),
+                                  btnOkOnPress: () {},
+                                ).show();
+                              }
 
-                          setState(() {
-                            _showSpinner = false;
-                          });
+                              setState(() {
+                                _showSpinner = false;
+                              });
+                            },
+                          );
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

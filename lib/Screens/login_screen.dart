@@ -140,7 +140,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             },
                           ),
                           TextButton(
-                            onPressed: () async {
+                            onPressed: () {
                               if (username == null || password == null) {
                                 AwesomeDialog(
                                   context: context,
@@ -157,25 +157,30 @@ class _LogInScreenState extends State<LogInScreen> {
                                 _showSpinner = true;
                               });
 
-                              try {
-                                _loginUser =
-                                    await logInUser(username!, password!);
-                                if (_loginUser != null) {
-                                  Navigator.pushNamed(context, 'main');
-                                }
-                              } catch (e) {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.ERROR,
-                                  animType: AnimType.SCALE,
-                                  title: e.toString().substring(11),
-                                  btnOkOnPress: () {},
-                                ).show();
-                              }
+                              Future.delayed(
+                                const Duration(seconds: 2),
+                                () async {
+                                  try {
+                                    _loginUser =
+                                        await logInUser(username!, password!);
+                                    if (_loginUser != null) {
+                                      Navigator.pushNamed(context, 'main');
+                                    }
+                                  } catch (e) {
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.ERROR,
+                                      animType: AnimType.SCALE,
+                                      title: e.toString().substring(11),
+                                      btnOkOnPress: () {},
+                                    ).show();
+                                  }
 
-                              setState(() {
-                                _showSpinner = false;
-                              });
+                                  setState(() {
+                                    _showSpinner = false;
+                                  });
+                                },
+                              );
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
