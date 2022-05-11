@@ -1,20 +1,26 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat_app/constants.dart';
-
-import '../models/login.dart';
+import 'package:chat_app/models/user.dart';
 
 Future<User> logInUser(String username, String password) async {
-  final response;
+  final dynamic response;
+  final User user;
+  final String url;
+  if (Platform.isAndroid) {
+    url = 'http://10.0.2.2:8000/login';
+  } else {
+    url = 'http://localhost:8000/login';
+  }
   try {
     response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/login'),
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -24,14 +30,15 @@ Future<User> logInUser(String username, String password) async {
       }),
     );
   } catch (e) {
-    throw Exception('Error logging in user');
+    throw Exception('Error connecting to the database');
   }
-  if (response.statusCode == 201) {
+  user = User.fromJson(jsonDecode(response.body));
+  if (user.name != null) {
     print(response.body);
-    return User.fromJson(jsonDecode(response.body));
+    return user;
   } else {
-    print(response.body);
-    throw Exception('Error logging in user');
+    dynamic decodedData = jsonDecode(response.body);
+    throw Exception(decodedData["error"]);
   }
 }
 
@@ -104,10 +111,14 @@ class _LogInScreenState extends State<LogInScreen> {
                             cursorWidth: 10.0,
                             cursorHeight: 22.0,
                             decoration: kTextFieldDecoration.copyWith(
-                              hintText: 'Enter the email',
+                              hintText: 'Enter the username',
                             ),
                             onChanged: (value) {
-                              username = value;
+                              if (value == '') {
+                                username = null;
+                              } else {
+                                username = value;
+                              }
                             },
                           ),
                           TextField(
@@ -121,7 +132,11 @@ class _LogInScreenState extends State<LogInScreen> {
                               hintText: 'Enter the password',
                             ),
                             onChanged: (value) {
-                              password = value;
+                              if (value == '') {
+                                password = null;
+                              } else {
+                                password = value;
+                              }
                             },
                           ),
                           TextButton(
@@ -153,7 +168,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   context: context,
                                   dialogType: DialogType.ERROR,
                                   animType: AnimType.SCALE,
-                                  title: 'Error Logging in User',
+                                  title: e.toString().substring(11),
                                   btnOkOnPress: () {},
                                 ).show();
                               }

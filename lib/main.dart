@@ -3,6 +3,7 @@ import 'package:chat_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'Screens/main_screen.dart';
 import 'Screens/profile.dart';
+import 'Screens/search_screen.dart';
 import 'Screens/signup_screen.dart';
 import 'data.dart';
 
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         'Profile': (context) => Profile(),
         'LogIn': (context) => LogInScreen(),
         'SignUp': (context) => SignUpScreen(),
+        'search': (context) => const SearchScreen(),
       },
       // home: MainScreen(),
     );

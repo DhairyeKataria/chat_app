@@ -14,11 +14,17 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 Future<User> createUser(
     String name, String username, String email, String password) async {
-  final response;
+  final http.Response response;
+  final dynamic user;
+  final String url;
+  if (Platform.isAndroid) {
+    url = 'http://10.0.2.2:8000/register';
+  } else {
+    url = 'http://localhost:8000/register';
+  }
   try {
     response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/register'),
-      // Uri.parse('http://localhost:8000/register'),
+      Uri.parse(url),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -30,14 +36,14 @@ Future<User> createUser(
       }),
     );
   } catch (e) {
-    rethrow;
+    throw Exception("Error connecting to the database");
   }
-  if (response.statusCode == 201) {
-    print(response.body);
-    return User.fromJson(jsonDecode(response.body));
+  user = User.fromJson(jsonDecode(response.body));
+  if (user.name != null) {
+    return user;
   } else {
-    print(response.body);
-    throw Exception('Error creating user');
+    dynamic decodedData = jsonDecode(response.body);
+    throw Exception(decodedData["error"]);
   }
 }
 
@@ -77,16 +83,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
     //
     List<Function(String)> signUpFunctions = [
       (value) {
-        name = value;
+        if (value == '') {
+          name = null;
+        } else {
+          name = value;
+        }
       },
       (value) {
-        username = value;
+        if (value == '') {
+          username = null;
+        } else {
+          username = value;
+        }
       },
       (value) {
-        email = value;
+        if (value == '') {
+          email = null;
+        } else {
+          email = value;
+        }
       },
       (value) {
-        password = value;
+        if (value == '') {
+          password = null;
+        } else {
+          password = value;
+        }
       },
     ];
 
@@ -219,7 +241,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               context: context,
                               dialogType: DialogType.ERROR,
                               animType: AnimType.SCALE,
-                              title: e.toString(),
+                              title: e.toString().substring(11),
                               btnOkOnPress: () {},
                             ).show();
                           }

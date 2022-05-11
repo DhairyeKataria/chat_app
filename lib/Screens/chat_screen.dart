@@ -1,3 +1,4 @@
+import 'package:chat_app/Screens/search_screen.dart';
 import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 import '../components/chat_tile.dart';
@@ -32,9 +33,23 @@ class ChatScreen extends StatelessWidget {
             // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SearchBar(
-                onChanged: (value) {},
-                onPressed: () {},
+              child: Hero(
+                tag: "search bar",
+                child: Material(
+                  child: SearchBar(
+                    autoFocus: false,
+                    showIcon: false,
+                    onChanged: (value) {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return const SearchScreen();
+                        },
+                      ));
+                    },
+                    onIconPressed: () {},
+                  ),
+                ),
               ),
             ),
             ListView.builder(

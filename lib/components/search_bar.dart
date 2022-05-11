@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
-  const SearchBar({required this.onPressed, required this.onChanged});
+  const SearchBar({
+    required this.autoFocus,
+    required this.showIcon,
+    required this.onIconPressed,
+    required this.onTap,
+    required this.onChanged,
+  });
 
-  final Function() onPressed;
+  final bool autoFocus;
+  final bool showIcon;
+  final Function() onIconPressed;
+  final Function() onTap;
   final Function(String) onChanged;
 
   @override
@@ -16,6 +25,7 @@ class SearchBar extends StatelessWidget {
           flex: 4,
           child: TextField(
             keyboardType: TextInputType.name,
+            autofocus: autoFocus,
             decoration: InputDecoration(
               hintText: 'Search...',
               hintStyle: TextStyle(color: Colors.grey.shade500),
@@ -31,24 +41,26 @@ class SearchBar extends StatelessWidget {
               ),
             ),
             onChanged: onChanged,
+            onTap: onTap,
           ),
         ),
-        Flexible(
-          child: Container(
-            width: 60.0,
-            height: 55.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: Colors.grey.shade200,
-            ),
-            child: IconButton(
-              splashColor: Colors.grey.shade200,
-              color: Colors.grey.shade500,
-              icon: const Icon(Icons.search),
-              onPressed: onPressed,
+        if (showIcon)
+          Flexible(
+            child: Container(
+              width: 60.0,
+              height: 55.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.grey.shade200,
+              ),
+              child: IconButton(
+                splashColor: Colors.grey.shade200,
+                color: Colors.grey.shade500,
+                icon: const Icon(Icons.search),
+                onPressed: onIconPressed,
+              ),
             ),
           ),
-        ),
       ],
     );
   }

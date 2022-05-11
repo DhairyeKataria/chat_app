@@ -57,9 +57,12 @@ class ChatDetailPageAppBar extends StatelessWidget
                   ],
                 ),
               ),
-              Icon(
-                Icons.more_vert,
-                color: Colors.grey.shade700,
+              GestureDetector(
+                child: Icon(
+                  Icons.more_vert,
+                  color: Colors.grey.shade700,
+                ),
+                onTap: () {},
               ),
             ],
           ),
