@@ -1,10 +1,9 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:chat_app/Screens/search_screen.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/data.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../components/chat_tile.dart';
 import '../components/search_bar.dart';
 import '../models/chat_model.dart';
@@ -17,7 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 Future fetchContacts() async {
-  final response = await http.get(Uri.parse('$url/contacts/dhairyekataria'));
+  final response = await http.get(Uri.parse('$url/contacts/pacifire'));
   print(jsonDecode(response.body));
   return;
 }

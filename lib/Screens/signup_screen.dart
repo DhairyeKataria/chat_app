@@ -15,10 +15,10 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 Future<User> createUser(
     String name, String username, String email, String password) async {
   final http.Response response;
-  final dynamic user;
+  final User user;
   try {
     response = await http.post(
-      Uri.parse('$url/response'),
+      Uri.parse('$url/register'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -34,8 +34,10 @@ Future<User> createUser(
   }
   user = User.fromJson(jsonDecode(response.body));
   if (user.name != null) {
+    print(response.body);
     return user;
   } else {
+    print(response.body);
     dynamic decodedData = jsonDecode(response.body);
     throw Exception(decodedData["error"]);
   }
