@@ -16,7 +16,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 Future fetchContacts() async {
-  final response = await http.get(Uri.parse('$url/contacts/pacifire'));
+  final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
   print(jsonDecode(response.body));
   return;
 }

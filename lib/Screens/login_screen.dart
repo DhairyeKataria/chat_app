@@ -1,3 +1,4 @@
+import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -29,6 +30,7 @@ Future<User> logInUser(String username, String password) async {
   user = User.fromJson(jsonDecode(response.body));
   if (user.name != null) {
     print(response.body);
+    currentUser = user.username;
     return user;
   } else {
     dynamic decodedData = jsonDecode(response.body);

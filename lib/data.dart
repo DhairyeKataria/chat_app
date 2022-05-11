@@ -6,6 +6,8 @@ enum MessageType {
   receiver,
 }
 
+String? currentUser;
+
 bool isLoggedIn = false;
 
 class Data {
