@@ -10,9 +10,6 @@ import '../models/chat_model.dart';
 import '../models/send_menu_items.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/user.dart';
-
-// ignore: use_key_in_widget_constructors
 class ChatDetail extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
   const ChatDetail(this.chat);
@@ -24,7 +21,6 @@ class ChatDetail extends StatefulWidget {
 }
 
 class _ChatDetailState extends State<ChatDetail> {
-  // final List<ChatMessage> chatMessage = Data.chatMessage;
   List<ChatMessage> chatMessages = [];
 
   Future fetchChats() async {
@@ -55,12 +51,12 @@ class _ChatDetailState extends State<ChatDetail> {
     length = decodedData.length;
 
     for (int i = 0; i < length; i++) {
-      MessageType type = decodedData["from"] == currentUser.username
+      MessageType type = decodedData[i]["from"] == currentUser.username
           ? MessageType.sender
           : MessageType.receiver;
 
       ChatMessage chatMessage =
-          ChatMessage(message: decodedData["content"], type: type);
+          ChatMessage(message: decodedData[i]["content"], type: type);
       _chatMessages.add(chatMessage);
     }
 
