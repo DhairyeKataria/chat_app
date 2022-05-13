@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,37 +12,7 @@ import 'package:chat_app/models/user.dart';
 import 'package:chat_app/components/profile_image_uploader_sheet.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-
-Future<User> createUser(
-    String name, String username, String email, String password) async {
-  final http.Response response;
-  final User user;
-  try {
-    response = await http.post(
-      Uri.parse('$url/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'name': name,
-        'username': username,
-        'email': email,
-        'password': password,
-      }),
-    );
-  } catch (e) {
-    throw Exception("Error connecting to the database");
-  }
-  user = User.fromJson(jsonDecode(response.body));
-  if (user.name != null) {
-    print(response.body);
-    return user;
-  } else {
-    print(response.body);
-    dynamic decodedData = jsonDecode(response.body);
-    throw Exception(decodedData["error"]);
-  }
-}
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -72,6 +43,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _imageFile = File(_pickedFile!.path);
     });
+  }
+
+  Future<User> createUser(
+      String name, String username, String email, String password) async {
+    final http.Response response;
+    final User user;
+    try {
+      response = await http.post(
+        Uri.parse('$url/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'username': username,
+          'email': email,
+          'password': password,
+        }),
+      );
+    } catch (e) {
+      throw Exception("Error connecting to the database");
+    }
+    user = User.fromJson(jsonDecode(response.body));
+    if (user.name != null) {
+      print(response.body);
+      Provider.of<Data>(context, listen: false).setCurrentUser(user);
+      return user;
+    } else {
+      print(response.body);
+      dynamic decodedData = jsonDecode(response.body);
+      throw Exception(decodedData["error"]);
+    }
   }
 
   @override
