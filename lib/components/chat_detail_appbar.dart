@@ -32,7 +32,7 @@ class ChatDetailPageAppBar extends StatelessWidget
               ),
               CircleAvatar(
                 backgroundImage: AssetImage(chat.image),
-                maxRadius: 20,
+                maxRadius: 26,
               ),
               const SizedBox(
                 width: 12,
@@ -72,5 +72,5 @@ class ChatDetailPageAppBar extends StatelessWidget
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(80.0);
 }

@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'package:chat_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../components/chat_bubble.dart';
 import '../components/chat_detail_appbar.dart';
 import '../data.dart';
 import '../models/chat_message.dart';
 import '../models/chat_model.dart';
 import '../models/send_menu_items.dart';
+import 'package:http/http.dart' as http;
+
+import '../models/user.dart';
 
 // ignore: use_key_in_widget_constructors
 class ChatDetail extends StatefulWidget {
@@ -19,7 +25,32 @@ class ChatDetail extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetail> {
   // final List<ChatMessage> chatMessage = Data.chatMessage;
-  final List<ChatMessage> chatMessage = [];
+  final List<ChatMessage> chatMessages = [];
+
+  Future fetchChats() async {
+    final dynamic response;
+    List<Chat> _chatMessages = [];
+    int length = 0;
+
+    final currentUser = Provider.of<Data>(context, listen: true).currentUser;
+
+    try {
+      response = await http.post(
+        Uri.parse('$url/chatmsgs'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': currentUser.username,
+          'password': widget.chat.username,
+        }),
+      );
+    } catch (e) {
+      throw Exception('Error connecting to the database');
+    }
+
+    print(response.body);
+  }
 
   List<SendMenuItems> menuItems = [
     SendMenuItems(
@@ -102,18 +133,19 @@ class _ChatDetailState extends State<ChatDetail> {
 
   @override
   Widget build(BuildContext context) {
+    fetchChats();
     return Scaffold(
       appBar: ChatDetailPageAppBar(widget.chat),
       body: Stack(
         children: <Widget>[
           ListView.builder(
-            itemCount: chatMessage.length,
+            itemCount: chatMessages.length,
             shrinkWrap: true,
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             physics: const AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return ChatBubble(
-                chatMessage: chatMessage[index],
+                chatMessage: chatMessages[index],
               );
             },
           ),

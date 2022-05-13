@@ -20,6 +20,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<Chat> chatList = [];
+  int times = 0;
 
   void fetchContacts() async {
     // //
@@ -38,12 +39,21 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     }
 
+    print(response.body);
     Provider.of<Data>(context, listen: false).setChatList(_chatList);
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (times == 0) {
+      fetchContacts();
+      times++;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    fetchContacts();
     chatList = Provider.of<Data>(context, listen: true).getChatList;
 
     return SafeArea(
@@ -95,7 +105,8 @@ class _ChatScreenState extends State<ChatScreen> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: ((context, index) {
                 return ChatTile(
-                  text: chatList[index].name,
+                  name: chatList[index].name,
+                  username: chatList[index].username,
                   secondaryText: chatList[index].secondaryText,
                   image: chatList[index].image,
                   time: chatList[index].time,
