@@ -227,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             () async {
                               try {
                                 _user = await createUser(
-                                  name!.toLowerCase(),
+                                  name!,
                                   username!.toLowerCase(),
                                   email!.toLowerCase(),
                                   password!,

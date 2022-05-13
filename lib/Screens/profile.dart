@@ -1,11 +1,19 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:chat_app/data.dart';
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+  Profile({Key? key}) : super(key: key);
+  User? currentUser;
 
   @override
   Widget build(BuildContext context) {
+    currentUser = Provider.of<Data>(context, listen: true).currentUser;
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
@@ -30,10 +38,11 @@ class Profile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(right: 20.0),
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('images/userImage7.jpeg'),
+                        // ignore: unnecessary_null_comparison
+                        backgroundImage: AssetImage(currentUser!.profileImage),
                         radius: 50.0,
                       ),
                     ),
@@ -41,9 +50,9 @@ class Profile extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Andrey Jones',
-                            style: TextStyle(
+                          Text(
+                            currentUser!.name,
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 26.0,
                               fontWeight: FontWeight.w700,
@@ -53,7 +62,7 @@ class Profile extends StatelessWidget {
                             height: 10.0,
                           ),
                           Text(
-                            'andreyjones12',
+                            currentUser!.username,
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontSize: 16.0,
@@ -73,37 +82,15 @@ class Profile extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.email,
                         size: 40.0,
                         color: Color(0xff4e4655),
                       ),
                       Text(
-                        'dhairyekataria.dk@gmail.com',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Color(0xff4e4655),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(
-                        Icons.email,
-                        size: 40.0,
-                        color: Color(0xff4e4655),
-                      ),
-                      Text(
-                        'dhairyekataria.dk@gmail.com',
-                        style: TextStyle(
+                        currentUser!.email,
+                        style: const TextStyle(
                           fontSize: 20.0,
                           color: Color(0xff4e4655),
                         ),

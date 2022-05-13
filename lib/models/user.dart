@@ -24,7 +24,9 @@ class User {
       username: json["username"],
       email: json["email"],
       isProfileImageSet: json["isProfileImageSet"],
-      profileImage: json["profileImage"],
+      profileImage: json["isProfileImageSet"] == false
+          ? 'images/default.png'
+          : json["profileImage"],
       contacts: json["contacts"],
       // username: json['username'],
       // email: json['username'],
