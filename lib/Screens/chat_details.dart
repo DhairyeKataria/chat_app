@@ -41,8 +41,8 @@ class _ChatDetailState extends State<ChatDetail> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'username': currentUser.username,
-          'password': widget.chat.username,
+          'from': currentUser.username,
+          'to': widget.chat.username,
         }),
       );
     } catch (e) {
