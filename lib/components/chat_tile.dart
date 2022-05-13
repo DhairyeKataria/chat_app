@@ -29,7 +29,7 @@ class _ChatTileState extends State<ChatTile> {
   void initState() {
     super.initState();
     chat = Chat(
-      text: widget.text,
+      name: widget.text,
       secondaryText: widget.secondaryText,
       image: widget.image,
       time: widget.time,

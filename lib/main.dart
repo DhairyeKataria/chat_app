@@ -1,14 +1,21 @@
 import 'package:chat_app/Screens/chat_details.dart';
 import 'package:chat_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Screens/main_screen.dart';
 import 'Screens/profile.dart';
 import 'Screens/search_screen.dart';
 import 'Screens/signup_screen.dart';
 import 'data.dart';
+import 'models/chat_model.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  // await storage.GetStorage.init();
+  // runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => Data(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +36,9 @@ class MyApp extends StatelessWidget {
       home: LogInScreen(),
       routes: {
         'main': (context) => const MainScreen(),
-        'Chat Details': (context) => ChatDetail(Data.chatList[0]),
+        'Chat Details': (context) => ChatDetail(
+              Provider.of<Data>(context, listen: true).getChatList[0],
+            ),
         'Profile': (context) => Profile(),
         'LogIn': (context) => LogInScreen(),
         'SignUp': (context) => SignUpScreen(),

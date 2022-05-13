@@ -18,7 +18,8 @@ class ChatDetail extends StatefulWidget {
 }
 
 class _ChatDetailState extends State<ChatDetail> {
-  final List<ChatMessage> chatMessage = Data.chatMessage;
+  // final List<ChatMessage> chatMessage = Data.chatMessage;
+  final List<ChatMessage> chatMessage = [];
 
   List<SendMenuItems> menuItems = [
     SendMenuItems(

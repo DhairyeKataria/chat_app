@@ -44,7 +44,7 @@ class ChatDetailPageAppBar extends StatelessWidget
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      chat.text,
+                      chat.name,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(
