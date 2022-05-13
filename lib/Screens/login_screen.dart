@@ -2,44 +2,16 @@ import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/models/user.dart';
-
-Future<User> logInUser(String username, String password) async {
-  final dynamic response;
-  final User user;
-  try {
-    response = await http.post(
-      Uri.parse('$url/login'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'username': username.toLowerCase(),
-        'password': password,
-      }),
-    );
-  } catch (e) {
-    throw Exception('Error connecting to the database');
-  }
-  user = User.fromJson(jsonDecode(response.body));
-  if (user.name != null) {
-    print(response.body);
-    currentUser = user.username;
-    return user;
-  } else {
-    dynamic decodedData = jsonDecode(response.body);
-    throw Exception(decodedData["error"]);
-  }
-}
+import 'package:provider/provider.dart';
 
 class LogInScreen extends StatefulWidget {
-  LogInScreen({Key? key}) : super(key: key);
+  const LogInScreen({Key? key}) : super(key: key);
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -50,6 +22,34 @@ class _LogInScreenState extends State<LogInScreen> {
   String? password;
   bool _showSpinner = false;
   User? _loginUser;
+
+  Future<User> logInUser(String username, String password) async {
+    final dynamic response;
+    final User user;
+    try {
+      response = await http.post(
+        Uri.parse('$url/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username.toLowerCase(),
+          'password': password,
+        }),
+      );
+    } catch (e) {
+      throw Exception('Error connecting to the database');
+    }
+    user = User.fromJson(jsonDecode(response.body));
+    if (user.name != null) {
+      print(response.body);
+      Provider.of<Data>(context, listen: false).setCurrentUser(user);
+      return user;
+    } else {
+      dynamic decodedData = jsonDecode(response.body);
+      throw Exception(decodedData["error"]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +220,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

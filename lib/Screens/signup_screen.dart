@@ -212,7 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               context: context,
                               dialogType: DialogType.ERROR,
                               animType: AnimType.SCALE,
-                              title: 'Empty Fields',
+                              title: 'Empty Field(s)',
                               btnOkOnPress: () {},
                             ).show();
                             return;

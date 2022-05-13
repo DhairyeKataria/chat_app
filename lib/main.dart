@@ -7,15 +7,14 @@ import 'Screens/profile.dart';
 import 'Screens/search_screen.dart';
 import 'Screens/signup_screen.dart';
 import 'data.dart';
-import 'models/chat_model.dart';
 
 void main() async {
-  // await storage.GetStorage.init();
-  // runApp(const MyApp());
-  runApp(ChangeNotifierProvider(
-    create: (context) => Data(),
-    child: const MyApp(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Data(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -10,106 +12,38 @@ import '../components/search_bar.dart';
 import '../models/chat_model.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-// Future fetchContacts() async {
-//   final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
-//   // List<Chat> _chatList = [];
-//   // for (int i = 0; i < jsonDecode(response.body).length; i++) {
-//   //   if (Chat.fromJson(jsonDecode(response.body)[i]).name != null) {
-//   //     _chatList.add(Chat.fromJson(jsonDecode(response.body)[i]));
-//   //   }
-//   //   // print(jsonDecode(response.body[i]));
-//   // }
-//   print(jsonDecode(response.body)[0]);
-//   return;
-// }
-
 class _ChatScreenState extends State<ChatScreen> {
-  // final List<Chat> chatList = Data.chatList;
   List<Chat> chatList = [];
 
-  // Future Function()? fetchContacts;
-
-  Future fetchContacts() async {
-    final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
+  void fetchContacts() async {
+    // //
     List<Chat> _chatList = [];
-    for (int i = 0; i < jsonDecode(response.body).length; i++) {
+    int length = 0;
+    final currentUser =
+        Provider.of<Data>(context, listen: true).currentUser.username;
+
+    final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
+    length = jsonDecode(response.body).length;
+
+    for (int i = 0; i < length; i++) {
       Chat chat = Chat.fromJson(jsonDecode(response.body)[i]);
       if (chat.name != null) {
         _chatList.add(chat);
-        // Provider.of<Data>(context, listen: false).addChat(chat);
       }
-      // print(jsonDecode(response.body[i]));
     }
+
     Provider.of<Data>(context, listen: false).setChatList(_chatList);
-    // chatList = Provider.of<Data>(context, listen: true).getChatList;
-    // setState(() {
-
-    // });
-    // setState(() {
-    //   // chatList.add(Chat.fromJson(jsonDecode(response.body)[0]));
-    //   chatList = _chatList;
-    // // chatList = Provider.of<Data>(context, listen: true).getChatList;
-    // });
-    // Chat chat = Chat.fromJson(jsonDecode(response.body)[0]);
-    print(jsonDecode(response.body));
-    // print(chat.name);
-    return;
-  }
-  // void fetchContacts() async {
-  //   final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
-  //   List<Chat> _chatList = [];
-  //   for (int i = 0; i < response.body.length; i++) {
-  //     _chatList.add(Chat.fromJson(jsonDecode(response.body[i])));
-  //   }
-  //   print(jsonDecode(response.body));
-  //   setState(() {
-  //     chatList = _chatList;
-  //   });
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchContacts();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Provider.of<Data>(context, listen: false).fetchContacts();
-    // chatList = await fetchContacts();
-
-    // Future fetchContacts() async {
-    //   final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
-    //   List<Chat> _chatList = [];
-    //   for (int i = 0; i < jsonDecode(response.body).length; i++) {
-    //     Chat chat = Chat.fromJson(jsonDecode(response.body)[i]);
-    //     if (chat.name != null) {
-    //       _chatList.add(chat);
-    //       // Provider.of<Data>(context, listen: false).addChat(chat);
-    //     }
-    //     // print(jsonDecode(response.body[i]));
-    //   }
-    //   Provider.of<Data>(context, listen: false).setChatList(_chatList);
-    //   // setState(() {
-    //   //   // chatList.add(Chat.fromJson(jsonDecode(response.body)[0]));
-    //   //   chatList = _chatList;
-    //   // });
-    //   // Chat chat = Chat.fromJson(jsonDecode(response.body)[0]);
-    //   print(jsonDecode(response.body));
-    //   // print(chat.name);
-    //   return;
-    // }
-
-    // setState(() {
-    //   fetchContacts();
-    // });
-
+    fetchContacts();
     chatList = Provider.of<Data>(context, listen: true).getChatList;
 
     return SafeArea(
@@ -119,9 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: const [
+            //   // Row(
+            //   //   mainAxisAlignment: MainAxisAlignment.start,
+            //   //   children: const [
             const Text(
               'Chats',
               style: TextStyle(
@@ -129,8 +63,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            //   ],
-            // ),
+            // //   ],
+            // // ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Hero(
@@ -155,9 +89,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ListView.builder(
               itemCount: chatList.length,
               shrinkWrap: true,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
+              // physics: const BouncingScrollPhysics(
+              //   parent: AlwaysScrollableScrollPhysics(),
+              // ),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: ((context, index) {
                 return ChatTile(
                   text: chatList[index].name,

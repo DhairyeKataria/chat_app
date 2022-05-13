@@ -44,41 +44,54 @@ class _ChatTileState extends State<ChatTile> {
         context,
         MaterialPageRoute(builder: (context) => ChatDetail(chat)),
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(widget.image),
-              maxRadius: 30.0,
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(widget.text),
-                  const SizedBox(height: 6.0),
-                  Text(
-                    widget.secondaryText,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey.shade500,
-                    ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 12.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: AssetImage(widget.image),
+                  maxRadius: 30.0,
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.text,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 6.0),
+                      Text(
+                        widget.secondaryText,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Text(
+                  widget.time,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: widget.isRead ? Colors.grey.shade500 : Colors.pink,
+                  ),
+                )
+              ],
             ),
-            Text(
-              widget.time,
-              style: TextStyle(
-                fontSize: 12.0,
-                color: widget.isRead ? Colors.grey.shade500 : Colors.pink,
-              ),
-            )
-          ],
-        ),
+          ),
+          Container(
+            color: Colors.grey.shade800,
+            height: 0.2,
+          ),
+        ],
       ),
     );
   }
