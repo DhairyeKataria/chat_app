@@ -25,11 +25,11 @@ class ChatDetail extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetail> {
   // final List<ChatMessage> chatMessage = Data.chatMessage;
-  final List<ChatMessage> chatMessages = [];
+  List<ChatMessage> chatMessages = [];
 
   Future fetchChats() async {
     final dynamic response;
-    List<Chat> _chatMessages = [];
+    List<ChatMessage> _chatMessages = [];
     int length = 0;
 
     final currentUser = Provider.of<Data>(context, listen: true).currentUser;
@@ -50,6 +50,21 @@ class _ChatDetailState extends State<ChatDetail> {
     }
 
     print(response.body);
+
+    dynamic decodedData = jsonDecode(response.body);
+    length = decodedData.length;
+
+    for (int i = 0; i < length; i++) {
+      MessageType type = decodedData["from"] == currentUser.username
+          ? MessageType.sender
+          : MessageType.receiver;
+
+      ChatMessage chatMessage =
+          ChatMessage(message: decodedData["content"], type: type);
+      _chatMessages.add(chatMessage);
+    }
+
+    Provider.of<Data>(context, listen: false).setChatMessages(_chatMessages);
   }
 
   List<SendMenuItems> menuItems = [
@@ -134,6 +149,8 @@ class _ChatDetailState extends State<ChatDetail> {
   @override
   Widget build(BuildContext context) {
     fetchChats();
+    chatMessages = Provider.of<Data>(context, listen: true).getChatMessages;
+
     return Scaffold(
       appBar: ChatDetailPageAppBar(widget.chat),
       body: Stack(

@@ -12,7 +12,7 @@ bool isLoggedIn = false;
 
 class Data extends ChangeNotifier {
   final List<Chat> _chatList = [];
-  final List<ChatMessage> _chatMessage = [];
+  final List<ChatMessage> _chatMessages = [];
   late User _currentUser;
 
   User get currentUser {
@@ -24,7 +24,7 @@ class Data extends ChangeNotifier {
   }
 
   List<ChatMessage> get getChatMessages {
-    return _chatMessage;
+    return _chatMessages;
   }
 
   void setCurrentUser(User user) {
@@ -39,6 +39,12 @@ class Data extends ChangeNotifier {
   void setChatList(List<Chat> chat) {
     _chatList.clear();
     _chatList.addAll(chat);
+    notifyListeners();
+  }
+
+  void setChatMessages(List<ChatMessage> chatMessage) {
+    _chatMessages.clear();
+    _chatMessages.addAll(chatMessage);
     notifyListeners();
   }
 }

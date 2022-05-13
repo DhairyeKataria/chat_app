@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:chat_app/data.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -40,6 +42,7 @@ class _LogInScreenState extends State<LogInScreen> {
     } catch (e) {
       throw Exception('Error connecting to the database');
     }
+
     user = User.fromJson(jsonDecode(response.body));
     if (user.name != null) {
       print(response.body);
