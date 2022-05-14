@@ -70,7 +70,7 @@ class _ChatDetailState extends State<ChatDetail> {
 
     try {
       response = await http.post(
-        Uri.parse('$url/chatmsgs'),
+        Uri.parse('$url/msg'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
