@@ -56,7 +56,7 @@ class SearchBar extends StatelessWidget {
               child: IconButton(
                 splashColor: Colors.grey.shade200,
                 color: Colors.grey.shade500,
-                icon: const Icon(Icons.search),
+                icon: const Icon(Icons.person_add_alt),
                 onPressed: onIconPressed,
               ),
             ),

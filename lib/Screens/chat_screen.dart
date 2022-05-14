@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
-                          return const SearchScreen();
+                          return SearchScreen();
                         },
                       ));
                     },

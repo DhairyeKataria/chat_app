@@ -185,16 +185,21 @@ class _ChatDetailState extends State<ChatDetail> {
       appBar: ChatDetailPageAppBar(widget.chat),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemCount: chatMessages.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return ChatBubble(
-                chatMessage: chatMessages[index],
-              );
-            },
+          Container(
+            padding: const EdgeInsets.only(bottom: 120.0),
+            child: Flexible(
+              child: ListView.builder(
+                itemCount: chatMessages.length,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return ChatBubble(
+                    chatMessage: chatMessages[index],
+                  );
+                },
+              ),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -265,7 +270,9 @@ class _ChatDetailState extends State<ChatDetail> {
               child: FloatingActionButton(
                 onPressed: () {
                   _controller.clear();
-                  sendChat();
+                  if (message != null) {
+                    sendChat();
+                  }
                 },
                 child: const Icon(
                   Icons.send,
