@@ -22,6 +22,7 @@ class ChatDetail extends StatefulWidget {
 
 class _ChatDetailState extends State<ChatDetail> {
   List<ChatMessage> chatMessages = [];
+  String? message;
 
   Future fetchChats() async {
     final dynamic response;
@@ -47,7 +48,7 @@ class _ChatDetailState extends State<ChatDetail> {
 
     print(response.body);
 
-    dynamic decodedData = jsonDecode(response.body);
+    final dynamic decodedData = jsonDecode(response.body);
     length = decodedData.length;
 
     for (int i = 0; i < length; i++) {
@@ -61,6 +62,31 @@ class _ChatDetailState extends State<ChatDetail> {
     }
 
     Provider.of<Data>(context, listen: false).setChatMessages(_chatMessages);
+  }
+
+  Future sendChat() async {
+    final dynamic response;
+    final currentUser = Provider.of<Data>(context, listen: true).currentUser;
+
+    try {
+      response = await http.post(
+        Uri.parse('$url/chatmsgs'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'from': currentUser.username,
+          'to': widget.chat.username,
+          'content': message!,
+        }),
+      );
+    } catch (e) {
+      throw Exception('Error connecting to the database');
+    }
+
+    print(response.body);
+
+    fetchChats();
   }
 
   List<SendMenuItems> menuItems = [
@@ -207,6 +233,13 @@ class _ChatDetailState extends State<ChatDetail> {
                               hintStyle: TextStyle(color: Colors.grey.shade500),
                               border: InputBorder.none,
                             ),
+                            onChanged: (value) {
+                              if (value == '') {
+                                message = null;
+                              } else {
+                                message = value;
+                              }
+                            },
                           ),
                         ),
                       ),
@@ -221,7 +254,9 @@ class _ChatDetailState extends State<ChatDetail> {
             child: Container(
               padding: const EdgeInsets.only(right: 30, bottom: 50),
               child: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  sendChat();
+                },
                 child: const Icon(
                   Icons.send,
                   color: Colors.white,

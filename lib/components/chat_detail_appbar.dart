@@ -47,11 +47,11 @@ class ChatDetailPageAppBar extends StatelessWidget
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(
-                      height: 6,
+                      height: 8,
                     ),
                     const Text(
                       "Online",
-                      style: TextStyle(color: Colors.green, fontSize: 12),
+                      style: TextStyle(color: Colors.green, fontSize: 12.5),
                     ),
                   ],
                 ),

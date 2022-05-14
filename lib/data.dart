@@ -32,19 +32,19 @@ class Data extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addChat(Chat chat) {
-    _chatList.add(chat);
+  void addChatMessage(ChatMessage chatMessage) {
+    _chatMessages.add(chatMessage);
   }
 
-  void setChatList(List<Chat> chat) {
+  void setChatList(List<Chat> chats) {
     _chatList.clear();
-    _chatList.addAll(chat);
+    _chatList.addAll(chats);
     notifyListeners();
   }
 
-  void setChatMessages(List<ChatMessage> chatMessage) {
+  void setChatMessages(List<ChatMessage> chatMessages) {
     _chatMessages.clear();
-    _chatMessages.addAll(chatMessage);
+    _chatMessages.addAll(chatMessages);
     notifyListeners();
   }
 }

@@ -122,7 +122,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           TextField(
                             obscureText: true,
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.visiblePassword,
                             cursorColor: Colors.pink,
                             cursorRadius: const Radius.circular(20.0),
                             cursorWidth: 10.0,
@@ -160,8 +160,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                 const Duration(seconds: 2),
                                 () async {
                                   try {
-                                    _loginUser =
-                                        await logInUser(username!, password!);
+                                    _loginUser = await logInUser(
+                                        username!.toLowerCase(), password!);
                                     if (_loginUser != null) {
                                       Navigator.pushNamed(context, 'main');
                                     }

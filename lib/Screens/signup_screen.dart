@@ -38,6 +38,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     'Enter you password'
   ];
 
+  List<TextInputType> signUpKeyboards = [
+    TextInputType.name,
+    TextInputType.name,
+    TextInputType.emailAddress,
+    TextInputType.visiblePassword,
+  ];
   void takePhoto(ImageSource source) async {
     final _pickedFile = await ImagePicker().pickImage(source: source);
     setState(() {
@@ -188,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             children: [
                               for (int i = 0; i < 4; i++)
                                 TextField(
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: signUpKeyboards[i],
                                   obscureText: i == 3 ? true : false,
                                   cursorColor: Colors.pink,
                                   cursorRadius: const Radius.circular(20.0),
@@ -236,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   password!,
                                 );
                                 if (_user != null) {
-                                  Navigator.pushNamed(context, 'main');
+                                  Navigator.popAndPushNamed(context, 'main');
                                 }
                               } catch (e) {
                                 AwesomeDialog(
