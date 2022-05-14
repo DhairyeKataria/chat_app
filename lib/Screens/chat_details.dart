@@ -23,13 +23,14 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
   List<ChatMessage> chatMessages = [];
   String? message;
+  var _controller = TextEditingController();
 
   Future fetchChats() async {
     final dynamic response;
     List<ChatMessage> _chatMessages = [];
     int length = 0;
 
-    final currentUser = Provider.of<Data>(context, listen: true).currentUser;
+    final currentUser = Provider.of<Data>(context, listen: false).currentUser;
 
     try {
       response = await http.post(
@@ -66,7 +67,7 @@ class _ChatDetailState extends State<ChatDetail> {
 
   Future sendChat() async {
     final dynamic response;
-    final currentUser = Provider.of<Data>(context, listen: true).currentUser;
+    final currentUser = Provider.of<Data>(context, listen: false).currentUser;
 
     try {
       response = await http.post(
@@ -85,8 +86,11 @@ class _ChatDetailState extends State<ChatDetail> {
     }
 
     print(response.body);
-
-    fetchChats();
+    int times = 0;
+    if (times == 0) {
+      fetchChats();
+      times++;
+    }
   }
 
   List<SendMenuItems> menuItems = [
@@ -168,9 +172,13 @@ class _ChatDetailState extends State<ChatDetail> {
         });
   }
 
+  int times = 0;
   @override
   Widget build(BuildContext context) {
-    fetchChats();
+    if (times == 0) {
+      fetchChats();
+      times++;
+    }
     chatMessages = Provider.of<Data>(context, listen: true).getChatMessages;
 
     return Scaffold(
@@ -226,6 +234,7 @@ class _ChatDetailState extends State<ChatDetail> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 62.0),
                           child: TextField(
+                            controller: _controller,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             decoration: InputDecoration(
@@ -255,6 +264,7 @@ class _ChatDetailState extends State<ChatDetail> {
               padding: const EdgeInsets.only(right: 30, bottom: 50),
               child: FloatingActionButton(
                 onPressed: () {
+                  _controller.clear();
                   sendChat();
                 },
                 child: const Icon(
