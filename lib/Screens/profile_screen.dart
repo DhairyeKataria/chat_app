@@ -50,13 +50,16 @@ class ProfileScreen extends StatelessWidget {
                           // ignore: unnecessary_null_comparison
                           backgroundImage:
                               AssetImage(currentUser!.profileImage),
-                          radius: 50.0,
+                          radius: 60.0,
                         ),
                       ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(
+                              height: 12.0,
+                            ),
                             Text(
                               currentUser!.name,
                               style: const TextStyle(
@@ -66,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(
-                              height: 10.0,
+                              height: 12.0,
                             ),
                             Flexible(
                               child: Text(

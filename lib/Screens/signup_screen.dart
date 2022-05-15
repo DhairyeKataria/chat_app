@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           'mypic',
           File(filename).readAsBytes().asStream(),
           File(filename).lengthSync(),
-          filename: filename.split("/").last,
+          filename: username!,
         ),
       );
     } catch (e) {
@@ -270,6 +270,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return;
                           }
 
+                          if (_imageFile == null) {
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.ERROR,
+                              animType: AnimType.SCALE,
+                              title: 'Upload an Image',
+                              btnOkOnPress: () {},
+                            ).show();
+                            return;
+                          }
+
                           setState(() {
                             _showSpinner = true;
                           });
@@ -289,6 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   Navigator.popAndPushNamed(context, 'main');
                                 }
                               } catch (e) {
+                                print(e.toString());
                                 AwesomeDialog(
                                   context: context,
                                   dialogType: DialogType.ERROR,
