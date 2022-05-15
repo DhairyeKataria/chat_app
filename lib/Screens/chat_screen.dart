@@ -22,12 +22,12 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Chat> chatList = [];
   int times = 0;
 
-  void fetchContacts() async {
+  Future fetchContacts() async {
     // //
     List<Chat> _chatList = [];
     int length = 0;
     final currentUser =
-        Provider.of<Data>(context, listen: true).currentUser.username;
+        Provider.of<Data>(context, listen: false).currentUser.username;
 
     final response = await http.get(Uri.parse('$url/contacts/$currentUser'));
     length = jsonDecode(response.body).length;
@@ -44,12 +44,16 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     if (times == 0) {
-      fetchContacts();
+      fetchContactsOnInit();
       times++;
     }
+  }
+
+  void fetchContactsOnInit() async {
+    await fetchContacts();
   }
 
   @override
@@ -89,7 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         builder: (context) {
                           return SearchScreen();
                         },
-                      ));
+                      )).then((value) => fetchContacts());
                     },
                     onIconPressed: () {},
                   ),
@@ -111,6 +115,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   image: chatList[index].image,
                   time: chatList[index].time,
                   isRead: chatList[index].isRead,
+                  afterPop: () {
+                    fetchContacts();
+                  },
                 );
               }),
             )

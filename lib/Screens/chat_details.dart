@@ -23,7 +23,8 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
   List<ChatMessage> chatMessages = [];
   String? message;
-  var _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   Future fetchChats() async {
     final dynamic response;
@@ -63,6 +64,14 @@ class _ChatDetailState extends State<ChatDetail> {
     }
 
     Provider.of<Data>(context, listen: false).setChatMessages(_chatMessages);
+
+    if (decodedData != null) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100.0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   Future sendChat() async {
@@ -172,6 +181,18 @@ class _ChatDetailState extends State<ChatDetail> {
         });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100.0,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   int times = 0;
   @override
   Widget build(BuildContext context) {
@@ -186,19 +207,18 @@ class _ChatDetailState extends State<ChatDetail> {
       body: Stack(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.only(bottom: 120.0),
-            child: Flexible(
-              child: ListView.builder(
-                itemCount: chatMessages.length,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return ChatBubble(
-                    chatMessage: chatMessages[index],
-                  );
-                },
-              ),
+            padding: const EdgeInsets.only(bottom: 100.0),
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: chatMessages.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ChatBubble(
+                  chatMessage: chatMessages[index],
+                );
+              },
             ),
           ),
           Align(
@@ -271,6 +291,14 @@ class _ChatDetailState extends State<ChatDetail> {
                 onPressed: () {
                   _controller.clear();
                   if (message != null) {
+                    Provider.of<Data>(context, listen: false).addChatMessage(
+                      ChatMessage(message: message!, type: MessageType.sender),
+                    );
+                    _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent + 100.0,
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeOut,
+                    );
                     sendChat();
                   }
                 },

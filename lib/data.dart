@@ -34,6 +34,7 @@ class Data extends ChangeNotifier {
 
   void addChatMessage(ChatMessage chatMessage) {
     _chatMessages.add(chatMessage);
+    notifyListeners();
   }
 
   void setChatList(List<Chat> chats) {

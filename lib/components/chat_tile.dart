@@ -11,6 +11,7 @@ class ChatTile extends StatefulWidget {
     required this.image,
     required this.time,
     required this.isRead,
+    required this.afterPop,
   });
 
   final String name;
@@ -19,6 +20,7 @@ class ChatTile extends StatefulWidget {
   final String image;
   final String time;
   final bool isRead;
+  final Function() afterPop;
 
   @override
   State<ChatTile> createState() => _ChatTileState();
@@ -39,10 +41,14 @@ class _ChatTileState extends State<ChatTile> {
     );
 
     return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ChatDetail(chat)),
-      ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatDetail(chat)),
+        ).then((value) {
+          widget.afterPop();
+        });
+      },
       child: Container(
         padding: const EdgeInsets.only(left: 2.0, right: 2.0, top: 12.0),
         child: Column(
