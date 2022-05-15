@@ -197,7 +197,7 @@ class _ChatDetailState extends State<ChatDetail> {
 
   @override
   void dispose() {
-    Provider.of<Data>(context, listen: false).setChatMessages([]);
+    // Provider.of<Data>(context, listen: false).setChatMessages([]);
     super.dispose();
   }
 
