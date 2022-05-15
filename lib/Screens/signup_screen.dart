@@ -55,6 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   uploadProflieImage(String filename) async {
     var request = http.MultipartRequest('POST', Uri.parse("$url/uploadimage"));
     try {
+      request.fields['username'] = username!;
       request.files.add(
         http.MultipartFile(
           'mypic',
