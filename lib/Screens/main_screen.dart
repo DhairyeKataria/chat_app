@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:chat_app/Screens/profile.dart';
+import 'package:chat_app/Screens/profile_screen.dart';
 import 'chat_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,8 +15,8 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> viewContainer = [
     ChatScreen(),
-    Profile(),
-    Profile(),
+    ProfileScreen(),
+    ProfileScreen(),
   ];
 
   void onTabTapped(int index) {

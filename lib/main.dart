@@ -3,7 +3,7 @@ import 'package:chat_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Screens/main_screen.dart';
-import 'Screens/profile.dart';
+import 'Screens/profile_screen.dart';
 import 'Screens/search_screen.dart';
 import 'Screens/signup_screen.dart';
 import 'data.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         'Chat Details': (context) => ChatDetail(
               Provider.of<Data>(context, listen: true).getChatList[0],
             ),
-        'Profile': (context) => Profile(),
+        'Profile': (context) => ProfileScreen(),
         'LogIn': (context) => LogInScreen(),
         'SignUp': (context) => SignUpScreen(),
         'search': (context) => SearchScreen(),
