@@ -27,10 +27,12 @@ ScrollPhysics keyboardDependentScrollPhysics(BuildContext context) {
 
 String get url {
   final String url;
-  if (Platform.isAndroid) {
-    url = 'http://10.0.2.2:8000';
-  } else {
-    url = 'http://localhost:8000';
-  }
+
+  url = "https://pacifire-server-chatapp.herokuapp.com";
+  // if (Platform.isAndroid) {
+  //   url = 'http://10.0.2.2:8000';
+  // } else {
+  //   url = 'http://localhost:8000';
+  // }
   return url;
 }
