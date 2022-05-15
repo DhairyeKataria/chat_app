@@ -35,6 +35,8 @@ class SearchScreen extends StatelessWidget {
       print(response.body);
     }
 
+    Future searchUsername() async {}
+
     return Scaffold(
       body: SafeArea(
         child: Container(

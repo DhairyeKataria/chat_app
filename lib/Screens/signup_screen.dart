@@ -22,7 +22,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  File? _imageFile;
+  String? _imageFile;
+  List<int>? bytes;
   User? _user;
 
   String? name;
@@ -47,9 +48,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void takePhoto(ImageSource source) async {
     final _pickedFile = await ImagePicker().pickImage(source: source);
     setState(() {
-      _imageFile = File(_pickedFile!.path);
+      _imageFile = _pickedFile!.path;
     });
   }
+
+  uploadProflieImage(String filename) async {
+    var request = http.MultipartRequest('POST', Uri.parse("$url/uploadimage"));
+    request.files.add(
+      http.MultipartFile(
+        'myPic',
+        File(filename).readAsBytes().asStream(),
+        File(filename).lengthSync(),
+        filename: filename.split("/").last,
+      ),
+    );
+    var res = await request.send();
+  }
+
+  // Future uploadImage() async {
+  //   final dynamic response;
+  //   if (_imageFile != null) {
+  //     final bytes = await _imageFile!.readAsBytes();
+  //     this.bytes = bytes;
+  //     try {
+  //       response = await http.post(
+  //         Uri.parse('$url/'),
+  //         headers: <String, String>{
+  //           'Content-Type': 'application/json; charset=UTF-8',
+  //         },
+  //         body: jsonEncode(<String, String>{
+  //           // 'username': currentUser.username,
+  //           // 'contact_username': contact_username!,
+  //         }),
+  //       );
+  //     } catch (e) {
+  //       throw Exception('Error connecting to the database');
+  //     }
+  //   }
+
+  //   print(response.body);
+  // }
 
   Future<User> createUser(
       String name, String username, String email, String password) async {
@@ -142,7 +180,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             CircleAvatar(
                               radius: 80.0,
                               backgroundImage: _imageFile != null
-                                  ? FileImage(_imageFile!) as ImageProvider
+                                  ? FileImage(File(_imageFile!))
+                                      as ImageProvider
                                   : AssetImage('images/default.png'),
                             ),
                             Positioned(
@@ -235,6 +274,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             const Duration(seconds: 2),
                             () async {
                               try {
+                                uploadProflieImage(_imageFile!);
                                 _user = await createUser(
                                   name!,
                                   username!.toLowerCase(),
