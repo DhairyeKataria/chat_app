@@ -65,7 +65,7 @@ class _ChatDetailState extends State<ChatDetail> {
 
     Provider.of<Data>(context, listen: false).setChatMessages(_chatMessages);
 
-    if (decodedData != null) {
+    if (decodedData != null && length > 10) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 100.0,
         duration: const Duration(seconds: 1),
@@ -185,12 +185,20 @@ class _ChatDetailState extends State<ChatDetail> {
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100.0,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeOut,
-      );
+      if (chatMessages.length > 10) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 100.0,
+          duration: const Duration(seconds: 1),
+          curve: Curves.linear,
+        );
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    Provider.of<Data>(context, listen: false).setChatMessages([]);
+    super.dispose();
   }
 
   int times = 0;
@@ -294,11 +302,13 @@ class _ChatDetailState extends State<ChatDetail> {
                     Provider.of<Data>(context, listen: false).addChatMessage(
                       ChatMessage(message: message!, type: MessageType.sender),
                     );
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent + 100.0,
-                      duration: const Duration(seconds: 1),
-                      curve: Curves.easeOut,
-                    );
+                    if (chatMessages.length > 10) {
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent + 100.0,
+                        duration: const Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      );
+                    }
                     sendChat();
                   }
                 },
