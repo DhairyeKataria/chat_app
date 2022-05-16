@@ -24,24 +24,10 @@ class User {
       username: json["username"],
       email: json["email"],
       isProfileImageSet: json["isProfileImageSet"],
-      profileImage: json["isProfileImageSet"] == false
-          ? 'images/default.png'
-          : json["profileImage"],
+      profileImage: json["isProfileImageSet"] == true
+          ? json["profileImage"]
+          : 'images/default.png',
       contacts: json["contacts"],
-      // username: json['username'],
-      // email: json['username'],
-      // password: json['username'],
     );
   }
 }
-    // {
-    //   "_id": "unique id",
-    //   "name": "Dhairye Kataria",
-    //   "username": "dhairyekataria",
-    //   "email": "dhairyekataria24@gmail.com",
-    //   "isProfileImageSet": true,
-    //   "profileImage": "image data",
-    //   "contacts": [],
-    //   //Contacts contains the list of all "_id"'s to which the loggedIn user has sent messages to
-    // }
-

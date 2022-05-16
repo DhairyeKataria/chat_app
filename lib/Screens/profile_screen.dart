@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
 import 'package:chat_app/data.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,13 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
   User? currentUser;
   String? username;
+  String imageString = '';
 
   @override
   Widget build(BuildContext context) {
     currentUser = Provider.of<Data>(context, listen: true).currentUser;
     username = currentUser!.username;
+    imageString = currentUser!.profileImage;
 
     return SafeArea(
       child: Container(
@@ -48,8 +51,9 @@ class ProfileScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 20.0),
                         child: CircleAvatar(
                           // ignore: unnecessary_null_comparison
-                          backgroundImage:
-                              AssetImage(currentUser!.profileImage),
+                          backgroundImage: currentUser!.isProfileImageSet
+                              ? MemoryImage(base64Decode(imageString))
+                              : AssetImage(imageString) as ImageProvider,
                           radius: 60.0,
                         ),
                       ),
@@ -182,8 +186,7 @@ class ProfileTile extends StatelessWidget {
             Icon(
               icon,
               size: 30.0,
-              color: Colors.grey.shade800,
-              // color: Colors.grey.shade600,
+              color: Colors.grey.shade800, // color: Colors.grey.shade600,
             ),
             Row(
               children: [
@@ -211,3 +214,16 @@ class ProfileTile extends StatelessWidget {
     );
   }
 }
+
+// Hii everyone, I really really need your help
+
+// I want to convert a base64 string to an image and use it to show it in a circle avatar
+// I am getting a bas64 string from the backend.
+// I have tried the following but it doesn't work 
+
+// ```dart
+//  backgroundImage: currentUser!.isProfileImageSet == true
+// ? AssetImage(currentUser!.profileImage)
+// : Image.memory(base64Decode(imageString!)) as ImageProvider,
+
+// ```

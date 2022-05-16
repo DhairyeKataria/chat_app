@@ -14,6 +14,11 @@ class Data extends ChangeNotifier {
   final List<Chat> _chatList = [];
   final List<ChatMessage> _chatMessages = [];
   late User _currentUser;
+  bool _justSignedUp = false;
+
+  bool get justSignedUp {
+    return _justSignedUp;
+  }
 
   User get currentUser {
     return _currentUser;
@@ -25,6 +30,11 @@ class Data extends ChangeNotifier {
 
   List<ChatMessage> get getChatMessages {
     return _chatMessages;
+  }
+
+  void setJustSignedUp(bool value) {
+    _justSignedUp = value;
+    notifyListeners();
   }
 
   void setCurrentUser(User user) {

@@ -23,7 +23,6 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   String? _imageFile;
-  List<int>? bytes;
   User? _user;
 
   String? name;
@@ -52,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-  uploadProflieImage(String filename) async {
+  Future uploadProflieImage(String filename) async {
     var request = http.MultipartRequest('POST', Uri.parse("$url/uploadimage"));
     try {
       request.fields['username'] = username!;
@@ -67,32 +66,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       rethrow;
     }
-    var res = await request.send();
+    await request.send();
   }
-
-  // Future uploadImage() async {
-  //   final dynamic response;
-  //   if (_imageFile != null) {
-  //     final bytes = await _imageFile!.readAsBytes();
-  //     this.bytes = bytes;
-  //     try {
-  //       response = await http.post(
-  //         Uri.parse('$url/'),
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //         body: jsonEncode(<String, String>{
-  //           // 'username': currentUser.username,
-  //           // 'contact_username': contact_username!,
-  //         }),
-  //       );
-  //     } catch (e) {
-  //       throw Exception('Error connecting to the database');
-  //     }
-  //   }
-
-  //   print(response.body);
-  // }
 
   Future<User> createUser(
       String name, String username, String email, String password) async {
@@ -273,13 +248,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           if (_imageFile == null) {
                             AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.ERROR,
-                              animType: AnimType.SCALE,
-                              title: 'Upload an Image',
-                              btnOkOnPress: () {},
-                            ).show();
-                            return;
+                                context: context,
+                                dialogType: DialogType.ERROR,
+                                animType: AnimType.SCALE,
+                                btnOkText: 'Yes',
+                                btnCancelText: 'No',
+                                title: 'No Profile Image',
+                                desc:
+                                    'Do you wish to Sign Up without any profile image',
+                                btnOkOnPress: () {},
+                                btnCancelOnPress: () {
+                                  return;
+                                }).show();
                           }
 
                           setState(() {
@@ -290,14 +270,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             const Duration(seconds: 2),
                             () async {
                               try {
-                                uploadProflieImage(_imageFile!);
                                 _user = await createUser(
                                   name!,
                                   username!.toLowerCase(),
                                   email!.toLowerCase(),
                                   password!,
                                 );
-                                if (_user != null) {
+                                if (_imageFile != null) {
+                                  await uploadProflieImage(_imageFile!);
+                                }
+                                if (_user!.name != null) {
+                                  Provider.of<Data>(context)
+                                      .setJustSignedUp(true);
                                   Navigator.popAndPushNamed(context, 'main');
                                 }
                               } catch (e) {

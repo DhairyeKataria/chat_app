@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,9 @@ class ChatDetailPageAppBar extends StatelessWidget
                 width: 2,
               ),
               CircleAvatar(
-                backgroundImage: AssetImage(chat.image),
+                backgroundImage: chat.isProfileImageSet
+                    ? MemoryImage(base64Decode(chat.image))
+                    : AssetImage(chat.image) as ImageProvider,
                 maxRadius: 26,
               ),
               const SizedBox(

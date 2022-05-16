@@ -2,29 +2,32 @@ class Chat {
   Chat({
     required this.name,
     required this.username,
-    required this.secondaryText,
+    required this.latestMessage,
     required this.image,
     required this.time,
     required this.isRead,
+    required this.isProfileImageSet,
   });
 
   final String name;
   final String username;
-  final String secondaryText;
+  final String latestMessage;
   final String image;
   final String time;
   final bool isRead;
+  final bool isProfileImageSet;
 
   factory Chat.fromJson(Map<String, dynamic> json) {
     return Chat(
       name: json["name"],
       username: json["username"],
-      secondaryText: json["latest_msg"]["content"],
+      latestMessage: json["latest_msg"]["content"],
       time: json["latest_msg"]["time"],
       isRead: false,
-      image: json["isProfileImageSet"] == false
-          ? 'images/default.png'
-          : json["profileImage"],
+      isProfileImageSet: json['isProfileImageSet'],
+      image: json["isProfileImageSet"] == true
+          ? json["profileImage"]
+          : 'images/default.png',
     );
   }
 }

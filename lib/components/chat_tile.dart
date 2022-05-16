@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:chat_app/Screens/chat_details.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ChatTile extends StatefulWidget {
     required this.image,
     required this.time,
     required this.isRead,
+    required this.isProfileImageSet,
     required this.afterPop,
   });
 
@@ -20,6 +22,7 @@ class ChatTile extends StatefulWidget {
   final String image;
   final String time;
   final bool isRead;
+  final bool isProfileImageSet;
   final Function() afterPop;
 
   @override
@@ -34,10 +37,11 @@ class _ChatTileState extends State<ChatTile> {
     chat = Chat(
       name: widget.name,
       username: widget.username,
-      secondaryText: widget.secondaryText,
+      latestMessage: widget.secondaryText,
       image: widget.image,
       time: widget.time,
       isRead: widget.isRead,
+      isProfileImageSet: widget.isProfileImageSet,
     );
 
     return InkWell(
@@ -58,7 +62,9 @@ class _ChatTileState extends State<ChatTile> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(widget.image),
+                    backgroundImage: widget.isProfileImageSet
+                        ? MemoryImage(base64Decode(widget.image))
+                        : AssetImage(widget.image) as ImageProvider,
                     maxRadius: 30.0,
                   ),
                   const SizedBox(width: 16.0),

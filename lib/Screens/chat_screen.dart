@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,35 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   List<Chat> chatList = [];
   int times = 0;
+
+  Future justSignedUpUser(String username, String password) async {
+    final dynamic response;
+    final User user;
+    try {
+      response = await http.post(
+        Uri.parse('$url/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'username': username.toLowerCase(),
+          'password': password,
+        }),
+      );
+    } catch (e) {
+      throw Exception('Error connecting to the database');
+    }
+
+    user = User.fromJson(jsonDecode(response.body));
+    if (user.name != null) {
+      print(response.body);
+      Provider.of<Data>(context, listen: false).setCurrentUser(user);
+      return;
+    } else {
+      dynamic decodedData = jsonDecode(response.body);
+      throw Exception(decodedData["error"]);
+    }
+  }
 
   Future fetchContacts() async {
     // //
@@ -53,6 +83,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void fetchContactsOnInit() async {
+    // if(Provider.of<Data>(context).justSignedUp == true) {
+    // final currentUser =
+    //     Provider.of<Data>(context, listen: false).currentUser;
+    //   justSignedUpUser(currentUser.username, currentUser.)
+    // }
     await fetchContacts();
   }
 
@@ -111,10 +146,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 return ChatTile(
                   name: chatList[index].name,
                   username: chatList[index].username,
-                  secondaryText: chatList[index].secondaryText,
+                  secondaryText: chatList[index].latestMessage,
                   image: chatList[index].image,
                   time: chatList[index].time,
                   isRead: chatList[index].isRead,
+                  isProfileImageSet: chatList[index].isProfileImageSet,
                   afterPop: () {
                     fetchContacts();
                   },
