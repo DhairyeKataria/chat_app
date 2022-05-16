@@ -64,12 +64,14 @@ class ProfileScreen extends StatelessWidget {
                             const SizedBox(
                               height: 12.0,
                             ),
-                            Text(
-                              currentUser!.name,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 26.0,
-                                fontWeight: FontWeight.w700,
+                            Flexible(
+                              child: Text(
+                                currentUser!.name,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 26.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             const SizedBox(
