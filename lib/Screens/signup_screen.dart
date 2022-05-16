@@ -227,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           Navigator.pop(context);
                                         },
                                         cameraOnTap: () {
-                                          takePhoto(ImageSource.gallery);
+                                          takePhoto(ImageSource.camera);
                                           Navigator.pop(context);
                                         },
                                       );
