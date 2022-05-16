@@ -214,16 +214,3 @@ class ProfileTile extends StatelessWidget {
     );
   }
 }
-
-// Hii everyone, I really really need your help
-
-// I want to convert a base64 string to an image and use it to show it in a circle avatar
-// I am getting a bas64 string from the backend.
-// I have tried the following but it doesn't work 
-
-// ```dart
-//  backgroundImage: currentUser!.isProfileImageSet == true
-// ? AssetImage(currentUser!.profileImage)
-// : Image.memory(base64Decode(imageString!)) as ImageProvider,
-
-// ```

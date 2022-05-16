@@ -44,6 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     TextInputType.emailAddress,
     TextInputType.visiblePassword,
   ];
+
   void takePhoto(ImageSource source) async {
     final _pickedFile = await ImagePicker().pickImage(source: source);
     setState(() {
@@ -134,6 +135,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       },
     ];
+
+    void signUp() {
+      setState(() {
+        _showSpinner = true;
+      });
+      Future.delayed(
+        const Duration(seconds: 2),
+        () async {
+          try {
+            _user = await createUser(
+              name!,
+              username!.toLowerCase(),
+              email!.toLowerCase(),
+              password!,
+            );
+            if (_imageFile != null) {
+              await uploadProflieImage(_imageFile!);
+            }
+
+            if (_user!.name != null) {
+              Provider.of<Data>(context, listen: false).setJustSignedUp(true);
+              Navigator.popAndPushNamed(context, 'main');
+            }
+          } catch (e) {
+            print(e.toString());
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.ERROR,
+              animType: AnimType.SCALE,
+              title: e.toString().substring(11),
+              btnOkOnPress: () {},
+            ).show();
+          }
+
+          setState(() {
+            _showSpinner = false;
+          });
+        },
+      );
+    }
 
     return ModalProgressHUD(
       inAsyncCall: _showSpinner,
@@ -255,51 +296,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 btnCancelText: 'No',
                                 title: 'No Profile Image',
                                 desc:
-                                    'Do you wish to Sign Up without any profile image',
-                                btnOkOnPress: () {},
+                                    'Do you wish to Sign Up without any profile image ?',
+                                btnOkOnPress: () {
+                                  signUp();
+                                },
                                 btnCancelOnPress: () {
                                   return;
                                 }).show();
+                          } else {
+                            signUp();
                           }
-
-                          setState(() {
-                            _showSpinner = true;
-                          });
-
-                          Future.delayed(
-                            const Duration(seconds: 2),
-                            () async {
-                              try {
-                                _user = await createUser(
-                                  name!,
-                                  username!.toLowerCase(),
-                                  email!.toLowerCase(),
-                                  password!,
-                                );
-                                if (_imageFile != null) {
-                                  await uploadProflieImage(_imageFile!);
-                                }
-                                if (_user!.name != null) {
-                                  Provider.of<Data>(context)
-                                      .setJustSignedUp(true);
-                                  Navigator.popAndPushNamed(context, 'main');
-                                }
-                              } catch (e) {
-                                print(e.toString());
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.ERROR,
-                                  animType: AnimType.SCALE,
-                                  title: e.toString().substring(11),
-                                  btnOkOnPress: () {},
-                                ).show();
-                              }
-
-                              setState(() {
-                                _showSpinner = false;
-                              });
-                            },
-                          );
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
