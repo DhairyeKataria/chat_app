@@ -75,7 +75,10 @@ class _ChatTileState extends State<ChatTile> {
                       children: [
                         Text(
                           widget.name,
-                          style: const TextStyle(fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.0,
+                          ),
                         ),
                         const SizedBox(height: 8.0),
                         Text(
