@@ -6,6 +6,7 @@ import 'Screens/main_screen.dart';
 import 'Screens/profile_screen.dart';
 import 'Screens/search_screen.dart';
 import 'Screens/signup_screen.dart';
+import 'Screens/splash_screen.dart';
 import 'data.dart';
 
 void main() async {
@@ -32,9 +33,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // Change home to SignUpScreen()
-      home: LogInScreen(),
+      home: const SplashScreen(),
       routes: {
         'main': (context) => const MainScreen(),
+        'SplashScreen': (context) => const SplashScreen(),
         'Chat Details': (context) => ChatDetail(
               Provider.of<Data>(context, listen: true).getChatList[0],
             ),

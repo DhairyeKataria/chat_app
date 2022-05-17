@@ -71,7 +71,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<User> createUser(
-      String name, String username, String email, String password) async {
+    String name,
+    String username,
+    String email,
+    String password,
+  ) async {
     final http.Response response;
     final User user;
     try {
@@ -155,7 +159,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             }
 
             if (_user!.name != null) {
-              Provider.of<Data>(context, listen: false).setJustSignedUp(true);
+              Provider.of<Data>(context, listen: false)
+                  .storeUserCredentials(username!, password!);
+              Provider.of<Data>(context, listen: false).setLoggedInStatus(true);
               Navigator.popAndPushNamed(context, 'main');
             }
           } catch (e) {

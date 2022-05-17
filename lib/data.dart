@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'models/chat_message.dart';
 import 'models/chat_model.dart';
 import 'models/user.dart';
@@ -8,16 +9,56 @@ enum MessageType {
   receiver,
 }
 
-bool isLoggedIn = false;
+const storage = FlutterSecureStorage();
+
+Future<bool> getLoggedInStatus() async {
+  String? result;
+  try {
+    result = await storage.read(key: 'loggedIn');
+  } catch (e) {
+    result = null;
+  }
+  if (result == null) {
+    return false;
+  } else {
+    return result.toLowerCase() == 'true';
+  }
+}
 
 class Data extends ChangeNotifier {
   final List<Chat> _chatList = [];
   final List<ChatMessage> _chatMessages = [];
   late User _currentUser;
-  bool _justSignedUp = false;
+  bool? _isLoggedIn = null;
+  String? _username;
+  String? _password;
 
-  bool get justSignedUp {
-    return _justSignedUp;
+  Future<bool?> isLoggedIn() async {
+    _isLoggedIn = await getLoggedInStatus();
+    return _isLoggedIn;
+  }
+
+  Future setLoggedInStatus(bool value) async {
+    _isLoggedIn = value;
+
+    await storage.write(key: 'loggedIn', value: 'true');
+    notifyListeners();
+  }
+
+  void storeUserCredentials(String username, String password) async {
+    await storage.write(key: 'username', value: username);
+    await storage.write(key: 'password', value: password);
+    _username = username;
+    _password = password;
+    notifyListeners();
+  }
+
+  Future<String?> getUsername() async {
+    return await storage.read(key: 'username');
+  }
+
+  Future<String?> getPassword() async {
+    return await storage.read(key: 'password');
   }
 
   User get currentUser {
@@ -30,11 +71,6 @@ class Data extends ChangeNotifier {
 
   List<ChatMessage> get getChatMessages {
     return _chatMessages;
-  }
-
-  void setJustSignedUp(bool value) {
-    _justSignedUp = value;
-    notifyListeners();
   }
 
   void setCurrentUser(User user) {

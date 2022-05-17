@@ -20,37 +20,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late Future future;
   List<Chat> chatList = [];
   int times = 0;
-
-  Future justSignedUpUser(String username, String password) async {
-    final dynamic response;
-    final User user;
-    try {
-      response = await http.post(
-        Uri.parse('$url/login'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'username': username.toLowerCase(),
-          'password': password,
-        }),
-      );
-    } catch (e) {
-      throw Exception('Error connecting to the database');
-    }
-
-    user = User.fromJson(jsonDecode(response.body));
-    if (user.name != null) {
-      print(response.body);
-      Provider.of<Data>(context, listen: false).setCurrentUser(user);
-      return;
-    } else {
-      dynamic decodedData = jsonDecode(response.body);
-      throw Exception(decodedData["error"]);
-    }
-  }
 
   Future fetchContacts() async {
     // //
@@ -71,93 +43,89 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print(response.body);
     Provider.of<Data>(context, listen: false).setChatList(_chatList);
+    return;
   }
 
   @override
   void initState() {
     super.initState();
-    if (times == 0) {
-      fetchContactsOnInit();
-      times++;
-    }
-  }
-
-  void fetchContactsOnInit() async {
-    // if(Provider.of<Data>(context).justSignedUp == true) {
-    // final currentUser =
-    //     Provider.of<Data>(context, listen: false).currentUser;
-    //   justSignedUpUser(currentUser.username, currentUser.)
-    // }
-    await fetchContacts();
+    future = fetchContacts();
   }
 
   @override
   Widget build(BuildContext context) {
     chatList = Provider.of<Data>(context, listen: true).getChatList;
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //   // Row(
-            //   //   mainAxisAlignment: MainAxisAlignment.start,
-            //   //   children: const [
-            const Text(
-              'Chats',
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
+    return Material(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //   // Row(
+              //   //   mainAxisAlignment: MainAxisAlignment.start,
+              //   //   children: const [
+              const Text(
+                'Chats',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            // //   ],
-            // // ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Hero(
-                tag: "search bar",
-                child: Material(
-                  child: SearchBar(
-                    autoFocus: false,
-                    showIcon: false,
-                    onChanged: (value) {},
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return SearchScreen();
-                        },
-                      )).then((value) => fetchContacts());
-                    },
-                    onIconPressed: () {},
+              // //   ],
+              // // ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Hero(
+                  tag: "search bar",
+                  child: Material(
+                    child: SearchBar(
+                      autoFocus: false,
+                      showIcon: false,
+                      onChanged: (value) {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return SearchScreen();
+                          },
+                        )).then((value) => fetchContacts());
+                      },
+                      onIconPressed: () {},
+                    ),
                   ),
                 ),
               ),
-            ),
-            ListView.builder(
-              itemCount: chatList.length,
-              shrinkWrap: true,
-              // physics: const BouncingScrollPhysics(
-              //   parent: AlwaysScrollableScrollPhysics(),
-              // ),
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: ((context, index) {
-                return ChatTile(
-                  name: chatList[index].name,
-                  username: chatList[index].username,
-                  secondaryText: chatList[index].latestMessage,
-                  image: chatList[index].image,
-                  time: chatList[index].time,
-                  isRead: chatList[index].isRead,
-                  isProfileImageSet: chatList[index].isProfileImageSet,
-                  afterPop: () {
-                    fetchContacts();
-                  },
-                );
-              }),
-            )
-          ],
+              FutureBuilder(
+                future: future,
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                    itemCount: chatList.length,
+                    shrinkWrap: true,
+                    // physics: const BouncingScrollPhysics(
+                    //   parent: AlwaysScrollableScrollPhysics(),
+                    // ),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: ((context, index) {
+                      return ChatTile(
+                        name: chatList[index].name,
+                        username: chatList[index].username,
+                        secondaryText: chatList[index].latestMessage,
+                        image: chatList[index].image,
+                        time: chatList[index].time,
+                        isRead: chatList[index].isRead,
+                        isProfileImageSet: chatList[index].isProfileImageSet,
+                        afterPop: () {
+                          fetchContacts();
+                        },
+                      );
+                    }),
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
