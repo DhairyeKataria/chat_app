@@ -7,6 +7,7 @@ import 'package:chat_app/Screens/login_screen.dart';
 import 'package:chat_app/constants.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:chat_app/data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -45,6 +46,7 @@ class SplashScreen extends StatelessWidget {
 
     bool? where;
     _() async {
+      prefs = await SharedPreferences.getInstance();
       where = await Provider.of<Data>(context, listen: false).isLoggedIn();
       if (where == true) {
         String? username =

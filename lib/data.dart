@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'models/chat_message.dart';
 import 'models/chat_model.dart';
 import 'models/user.dart';
@@ -9,12 +8,14 @@ enum MessageType {
   receiver,
 }
 
-const storage = FlutterSecureStorage();
+// const storage = FlutterSecureStorage();
+late final prefs;
 
 Future<bool> getLoggedInStatus() async {
   String? result;
   try {
-    result = await storage.read(key: 'loggedIn');
+    result = prefs.getString('loggedIn');
+    // result = await storage.read(key: 'loggedIn');
   } catch (e) {
     result = null;
   }
@@ -40,29 +41,35 @@ class Data extends ChangeNotifier {
 
   Future setLoggedInStatus(bool value) async {
     _isLoggedIn = value;
-
-    await storage.write(key: 'loggedIn', value: 'true');
+    await prefs.setString('loggedIn', 'true');
+    // await storage.write(key: 'loggedIn', value: 'true');
     notifyListeners();
   }
 
   void storeUserCredentials(String username, String password) async {
-    await storage.write(key: 'username', value: username);
-    await storage.write(key: 'password', value: password);
+    await prefs.setString('username', username);
+    await prefs.setString('password', password);
+    // await storage.write(key: 'username', value: username);
+    // await storage.write(key: 'password', value: password);
     _username = username;
     _password = password;
     notifyListeners();
   }
 
-  void deleteUserCredentials() {
-    storage.deleteAll();
+  void deleteUserCredentials() async {
+    await prefs.remove('username');
+    await prefs.remove('password');
+    // storage.deleteAll();
   }
 
   Future<String?> getUsername() async {
-    return await storage.read(key: 'username');
+    return prefs.getString('username');
+    // return await storage.read(key: 'username');
   }
 
   Future<String?> getPassword() async {
-    return await storage.read(key: 'password');
+    return prefs.getString('password');
+    // return await storage.read(key: 'password');
   }
 
   User get currentUser {
