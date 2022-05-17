@@ -166,11 +166,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                       if (_loginUser != null) {
                                         Provider.of<Data>(context,
                                                 listen: false)
-                                            .storeUserCredentials(
-                                                username!, password!);
+                                            .setLoggedInStatus(true);
                                         Provider.of<Data>(context,
                                                 listen: false)
-                                            .setLoggedInStatus(true);
+                                            .storeUserCredentials(
+                                                username!, password!);
 
                                         Navigator.pushNamed(context, 'main');
                                       }

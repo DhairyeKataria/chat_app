@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localstore/localstore.dart';
 import 'models/chat_message.dart';
 import 'models/chat_model.dart';
 import 'models/user.dart';
@@ -8,68 +9,54 @@ enum MessageType {
   receiver,
 }
 
-// const storage = FlutterSecureStorage();
 late final prefs;
-
-Future<bool> getLoggedInStatus() async {
-  String? result;
-  try {
-    result = prefs.getString('loggedIn');
-    // result = await storage.read(key: 'loggedIn');
-  } catch (e) {
-    result = null;
-  }
-  if (result == null) {
-    return false;
-  } else {
-    return result.toLowerCase() == 'true';
-  }
-}
 
 class Data extends ChangeNotifier {
   final List<Chat> _chatList = [];
   final List<ChatMessage> _chatMessages = [];
   late User _currentUser;
-  bool? _isLoggedIn = null;
-  String? _username;
-  String? _password;
+  bool? _isLoggedIn;
 
   Future<bool?> isLoggedIn() async {
-    _isLoggedIn = await getLoggedInStatus();
-    return _isLoggedIn;
+    bool? result;
+    try {
+      result = prefs.getBool('loggedIn');
+    } catch (e) {
+      result = null;
+    }
+    if (result == null) {
+      _isLoggedIn = false;
+      return false;
+    } else {
+      _isLoggedIn = true;
+      return result;
+    }
   }
 
   Future setLoggedInStatus(bool value) async {
-    _isLoggedIn = value;
-    await prefs.setString('loggedIn', 'true');
-    // await storage.write(key: 'loggedIn', value: 'true');
+    _isLoggedIn = await prefs.setBool('loggedIn', value);
+
     notifyListeners();
   }
 
   void storeUserCredentials(String username, String password) async {
     await prefs.setString('username', username);
     await prefs.setString('password', password);
-    // await storage.write(key: 'username', value: username);
-    // await storage.write(key: 'password', value: password);
-    _username = username;
-    _password = password;
-    notifyListeners();
   }
 
   void deleteUserCredentials() async {
+    setLoggedInStatus(false);
+    await prefs.remove('loggedIn');
     await prefs.remove('username');
     await prefs.remove('password');
-    // storage.deleteAll();
   }
 
   Future<String?> getUsername() async {
     return prefs.getString('username');
-    // return await storage.read(key: 'username');
   }
 
   Future<String?> getPassword() async {
     return prefs.getString('password');
-    // return await storage.read(key: 'password');
   }
 
   User get currentUser {

@@ -159,9 +159,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             }
 
             if (_user!.name != null) {
+              Provider.of<Data>(context, listen: true).setLoggedInStatus(true);
               Provider.of<Data>(context, listen: false)
                   .storeUserCredentials(username!, password!);
-              Provider.of<Data>(context, listen: false).setLoggedInStatus(true);
               Navigator.popAndPushNamed(context, 'main');
             }
           } catch (e) {

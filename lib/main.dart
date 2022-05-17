@@ -10,6 +10,7 @@ import 'Screens/splash_screen.dart';
 import 'data.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
       create: (context) => Data(),
