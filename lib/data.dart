@@ -53,6 +53,10 @@ class Data extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteUserCredentials() {
+    storage.deleteAll();
+  }
+
   Future<String?> getUsername() async {
     return await storage.read(key: 'username');
   }

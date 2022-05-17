@@ -128,7 +128,12 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Provider.of<Data>(context, listen: false)
+                              .deleteUserCredentials();
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              'SplashScreen', (Route<dynamic> route) => false);
+                        },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.red.shade100,
