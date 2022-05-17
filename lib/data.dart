@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localstore/localstore.dart';
 import 'models/chat_message.dart';
 import 'models/chat_model.dart';
 import 'models/user.dart';
