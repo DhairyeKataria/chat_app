@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -93,6 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: SearchBar(
                       autoFocus: false,
                       showIcon: false,
+                      icon: null,
                       onChanged: (value) {},
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(

@@ -36,7 +36,9 @@ class _MainScreenState extends State<MainScreen> {
         elevation: 4.0,
         icon: const Icon(FontAwesomeIcons.peopleGroup),
         label: const Text(' Friends'),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, 'FriendsScreen');
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(

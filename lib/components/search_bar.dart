@@ -8,6 +8,7 @@ class SearchBar extends StatelessWidget {
     required this.onIconPressed,
     required this.onTap,
     required this.onChanged,
+    required this.icon,
   });
 
   final bool autoFocus;
@@ -15,6 +16,7 @@ class SearchBar extends StatelessWidget {
   final Function() onIconPressed;
   final Function() onTap;
   final Function(String) onChanged;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +55,14 @@ class SearchBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0),
                 color: Colors.grey.shade200,
               ),
-              child: IconButton(
-                splashColor: Colors.grey.shade200,
-                color: Colors.grey.shade500,
-                icon: const Icon(Icons.person_add_alt),
-                onPressed: onIconPressed,
-              ),
+              child: icon == null
+                  ? IconButton(
+                      splashColor: Colors.grey.shade200,
+                      color: Colors.grey.shade500,
+                      icon: const Icon(Icons.person_add_alt),
+                      onPressed: onIconPressed,
+                    )
+                  : icon,
             ),
           ),
       ],

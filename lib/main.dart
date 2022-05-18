@@ -2,6 +2,7 @@ import 'package:chat_app/Screens/chat_details.dart';
 import 'package:chat_app/Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Screens/friends_screen.dart';
 import 'Screens/main_screen.dart';
 import 'Screens/profile_screen.dart';
 import 'Screens/search_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'main': (context) => const MainScreen(),
         'SplashScreen': (context) => const SplashScreen(),
+        'FriendsScreen': (context) => const FriendsScreen(),
         'Chat Details': (context) => ChatDetail(
               Provider.of<Data>(context, listen: true).getChatList[0],
             ),
