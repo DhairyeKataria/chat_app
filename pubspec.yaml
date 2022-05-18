@@ -42,6 +42,7 @@ dependencies:
   provider: ^6.0.2
   shared_preferences: ^2.0.15
   localstore: ^1.2.3
+  flutter_native_splash: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,12 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_native_splash:
+  color: '#ffffff'
+  image: images/chat_app_logo_800.png
+  android: true
+  ios: true
 
 # The following section is specific to Flutter.
 flutter:

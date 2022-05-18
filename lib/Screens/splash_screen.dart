@@ -67,7 +67,16 @@ class SplashScreen extends StatelessWidget {
             return const LogInScreen();
           }
         } else {
-          return Container();
+          return const Scaffold(
+            body: Center(
+                child: SizedBox(
+              height: 200,
+              width: 200,
+              child: Image(
+                image: AssetImage('images/chat_app_logo.png'),
+              ),
+            )),
+          );
         }
       },
     );
