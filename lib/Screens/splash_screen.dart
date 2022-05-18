@@ -68,6 +68,7 @@ class SplashScreen extends StatelessWidget {
           }
         } else {
           return const Scaffold(
+            backgroundColor: Colors.white,
             body: Center(
                 child: SizedBox(
               height: 200,

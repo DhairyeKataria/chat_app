@@ -296,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (_imageFile == null) {
                             AwesomeDialog(
                                 context: context,
-                                dialogType: DialogType.ERROR,
+                                dialogType: DialogType.WARNING,
                                 animType: AnimType.SCALE,
                                 btnOkText: 'Yes',
                                 btnCancelText: 'No',

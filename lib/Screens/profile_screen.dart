@@ -206,11 +206,14 @@ class ProfileTile extends StatelessWidget {
                       fontSize: 20.0,
                     ),
                   ),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20.0,
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20.0,
+                    ),
                   ),
                 ),
               ],
