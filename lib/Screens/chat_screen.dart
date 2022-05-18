@@ -23,8 +23,12 @@ class _ChatScreenState extends State<ChatScreen> {
   late Future future;
   List<Chat> chatList = [];
   int times = 0;
+  bool showSpinner = false;
 
   Future fetchContacts() async {
+    setState(() {
+      showSpinner = true;
+    });
     // //
     List<Chat> _chatList = [];
     int length = 0;
@@ -43,6 +47,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print(response.body);
     Provider.of<Data>(context, listen: false).setChatList(_chatList);
+
+    setState(() {
+      showSpinner = false;
+    });
+
     return;
   }
 
@@ -100,27 +109,39 @@ class _ChatScreenState extends State<ChatScreen> {
               FutureBuilder(
                 future: future,
                 builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: chatList.length,
-                    shrinkWrap: true,
-                    // physics: const BouncingScrollPhysics(
-                    //   parent: AlwaysScrollableScrollPhysics(),
-                    // ),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: ((context, index) {
-                      return ChatTile(
-                        name: chatList[index].name,
-                        username: chatList[index].username,
-                        secondaryText: chatList[index].latestMessage,
-                        image: chatList[index].image,
-                        time: chatList[index].time,
-                        isRead: chatList[index].isRead,
-                        isProfileImageSet: chatList[index].isProfileImageSet,
-                        afterPop: () {
-                          fetchContacts();
-                        },
-                      );
-                    }),
+                  return Column(
+                    children: [
+                      if (showSpinner == true)
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(
+                            color: Colors.pink,
+                          ),
+                        ),
+                      ListView.builder(
+                        itemCount: chatList.length,
+                        shrinkWrap: true,
+                        // physics: const BouncingScrollPhysics(
+                        //   parent: AlwaysScrollableScrollPhysics(),
+                        // ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: ((context, index) {
+                          return ChatTile(
+                            name: chatList[index].name,
+                            username: chatList[index].username,
+                            secondaryText: chatList[index].latestMessage,
+                            image: chatList[index].image,
+                            time: chatList[index].time,
+                            isRead: chatList[index].isRead,
+                            isProfileImageSet:
+                                chatList[index].isProfileImageSet,
+                            afterPop: () {
+                              fetchContacts();
+                            },
+                          );
+                        }),
+                      ),
+                    ],
                   );
                 },
               )
